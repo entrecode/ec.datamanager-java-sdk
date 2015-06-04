@@ -51,13 +51,13 @@ DataManager dm = new DataManager(
 Alternative without token:
 
 ```java
-DataManager dm = new DataManager("beefbeef"); // throws MalformedURLException
+DataManager dm = new DataManager("beefbeef"); // throws ECMalformedDataManagerIDException
 ```
 
 Initializing with read-only mode:
 
 ```java
-DataManager dm = new DataManager("beefbeef", true); // throws MalformedURLException
+DataManager dm = new DataManager("beefbeef", true); // throws ECMalformedDataManagerIDException
 ```
 
 ### Get Entries 
@@ -97,7 +97,7 @@ dm.model("myModel").entry("alwoigei")
 ```java
 ECEntry ecEntry = new ECEntry(…);
 …
-dm.model("myModel).createEntry(ecEntry)
+dm.model("myModel").createEntry(ecEntry)
 	.onError(new ECResponseListener<ECEntry>{
 		@Override
 		public void onResponse(ECEntry entry){
@@ -147,14 +147,13 @@ ecEntry.save()
 ### Model List
 
 ```java
-dm.modelList(
-	new ECResponseListener<List<ECModel>>{
+dm.modelList()
+	.onResponse(new ECResponseListener<List<Model>>{
 		@Override
-		public void onResponse(List<ECModel> models){
+		public void onResponse(List<Model> models){
 			// TODO something
 		}
-	}
-);
+	}).go();
 ```
 
 ### Get JSON Schema
@@ -162,7 +161,7 @@ dm.modelList(
 ```java
 dm.model("myModel").getSchema()
 	.for("PUT")
-	.onResponse(new ECResponseListener<ECJsonSchema>{ // TODO
+	.onResponse(new ECResponseListener<ECJsonSchema>{
 		@Override
 		public void onResponse(ECJsonSchema schema){
 			// TODO something
@@ -180,7 +179,7 @@ dm.model("myModel").getSchema()
 
 ```java
 dm.register()
-	.onResponse(new ECResponseListener<UUID>{ // TODO
+	.onResponse(new ECResponseListener<UUID>{
 		@Override
 		public void onResponse(UUID token){
 			// TODO save token
