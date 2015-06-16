@@ -26,7 +26,7 @@ compile 'de.entrecode:datamanager_java_sdk:0.2.0'
 
 ## Usage
 
-TODO add example reference.
+See the running example in `srv/main/java/de.entrecode.datamanager_java_sdk.example`.
 
 ### Initialization
 You need to connect to your Data Manager API using the `DataManager(…)` constructors.
@@ -40,32 +40,60 @@ DataManager dm = new DataManager(
 );
 ```
 
-Initializing without token (will be generated):
+Alternative:
 
 ```java
 DataManager dm = new DataManager(
-  new URL("https://datamanager.entrecode.de/api/beefbeef")
+  "beefbeef",
+  UUID.fromString("8c3b7b55-531f-4a03-b584-09fdef59cb0c")
 );
+```
+
+Initializing without token (will be generated):
+
+```java
+DataManager dm;
+DataManager.create(
+  new URL("https://datamanager.entrecode.de/api/beefbeef",
+  new ECResponseListener<DataManager>{
+    @Override
+    public void onResponse(dataManager){
+    	dm = dataManager;
+    }
+  });
 ```
 
 Alternative without token:
 
 ```java
-DataManager dm = new DataManager("beefbeef"); // throws ECMalformedDataManagerIDException
+DataManager dm;
+DataManager.create(
+  "beefbeef",
+  new ECResponseListener<DataManager>{
+    @Override
+    public void onResponse(dataManager){
+    	dm = dataManager;
+    }
+  });
 ```
 
 Initializing with read-only mode:
 
 ```java
 DataManager dm = new DataManager("beefbeef", true); // throws ECMalformedDataManagerIDException
+
+//OR
+
+DataManager dm2 = new DataManager(
+  new URL("https://datamanager.entrecode.de/api/beefbeef",
+  true);
 ```
 
-### Get Entries 
-TODO filter
+### Get Entries
 
 ```java
 dm.model("myModel").entries()
-	.onResponse(new ECResponseListener<List<ECEntry>>{
+    .onResponse(new ECResponseListener<List<ECEntry>>{
 		@Override
 		public void onResponse(List<ECEntry> entries){
 			// TODO something		
@@ -76,7 +104,14 @@ dm.model("myModel").entries()
 		public void onError(ECError error){
 			// TODO something
 		}
-	}).go();
+	})
+	.filter(new HashMap<String, String>(){{
+		put("propertyA~", "LikeThat");
+		put("propertyB", "ExactlyThat");
+		put("propertyCFrom", "FromThat");
+		put("propertyCTo", "ToThat");
+	}})
+	.go();
 ```
 
 ### Get Entry
@@ -98,7 +133,12 @@ dm.model("myModel").entry("alwoigei")
 ECEntry ecEntry = new ECEntry(…);
 …
 dm.model("myModel").createEntry(ecEntry)
-	.onError(new ECResponseListener<ECEntry>{
+	.onResponse(new ECResponseListener<ECEntry>{
+		@Override
+		public void onResponse(ECEntry entry){
+			// TODO something
+		}
+	}).onError(new ECResponseListener<ECEntry>{
 		@Override
 		public void onResponse(ECEntry entry){
 			// TODO something		
@@ -148,9 +188,9 @@ ecEntry.save()
 
 ```java
 dm.modelList()
-	.onResponse(new ECResponseListener<List<Model>>{
+	.onResponse(new ECResponseListener<ECModelList>{
 		@Override
-		public void onResponse(List<Model> models){
+		public void onResponse(ECModelList models){
 			// TODO something
 		}
 	}).go();
@@ -160,7 +200,7 @@ dm.modelList()
 
 ```java
 dm.model("myModel").getSchema()
-	.for("PUT")
+	.forMethod("PUT")
 	.onResponse(new ECResponseListener<ECJsonSchema>{
 		@Override
 		public void onResponse(ECJsonSchema schema){
@@ -178,11 +218,13 @@ dm.model("myModel").getSchema()
 ### User Managerment
 
 ```java
-dm.register()
+dm.register()… // is shorthand for
+dm.model("user").createEntry(new ECEntry())
 	.onResponse(new ECResponseListener<UUID>{
 		@Override
-		public void onResponse(UUID token){
+		public void onResponse(ECEntry user){
 			// TODO save token
+			saveSomwhere(user.getProperty("temporaryToken"));
 		}
 	})
 	.onError(new ECErrorListener{
@@ -192,8 +234,6 @@ dm.register()
 		}
 	}).go();
 ```
-
-`accessToken` is a property of the DataManager instance gettable via `getToken()`.
 
 Full example of updating a user entry:
 
@@ -278,7 +318,7 @@ dm.getImageThumbURL("46092f02-7441-4759-b6ff-8f3831d3da4b")
 
 dm.getImageURL("46092f02-7441-4759-b6ff-8f3831d3da4b")
 	.size(500)
-	.noCrop()
+	.crop()
 	.onResponse(new ECResponseListener<URL>{
 		@Override
 		public void onResponse(URL url){
@@ -301,7 +341,10 @@ dm.assets()
 ### Get Asset
 
 ```java
-dm.asset("46092f02-7441-4759-b6ff-8f3831d3da4b")
+dm.asset("46092f02-7441-4759-b6ff-8f3831d3da4b")… // is shorthand for
+dm.assets().filter(new HashMap<String, String>(){{
+		put("assetID", "46092f02-7441-4759-b6ff-8f3831d3da4b");
+	}})
 	.onResponse(new ECResponseListener<ECAsset>{
 		@Override
 		public void onResponse(ECAsset asset){
@@ -333,36 +376,6 @@ asset.delete()
 # Documentation
 
 see JavaDoc.
-
-### DataManager Class
-#### Constructors
-##### `public DataManager(URL url)`
-for initializing a `DataManager` with creating of a new user token.
-
-##### `public DataManager(URL url, UUID accessToken)`
-for initializing a `DataManager` with existing user token.
-
-##### `public DataManager(URL url, boolean readOnly)`
-for initializing a `DataManager` in read-only mode.
-
-##### `public DataManager(String id) throws MalformedURLException`
-for initalizing a `DataManager` by its `id` and creating of a new user token.
-
-`id` must be a `String` matching the regex `/^[0-9a-fA-F]{8}$/`.
-
-##### `public DataManager(String id, UUID accessToken) throws MalformedURLException`
-for initializing a `Datamanager` by its `id` and existing user token.
-
-`id` must be a `String` matching the regex `/^[0-9a-fA-F]{8}$/`.
-
-##### `public DataManager(String id, boolean readOnly) throws MalformedURLException`
-for initializing a `DataManager` by its `id` in read-only mode.
-
-`id` must be a `String` matching the regex `/^[0-9a-fA-F]{8}$/`.
-
-#### Getter & Setter
-##### `public UUID getToken()`
-retrieves the current `token` used by this `DataManager`. Can be used for saving a generated `token`.
 
 # Test & Coverage
 
