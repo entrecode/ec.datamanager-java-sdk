@@ -1,0 +1,47 @@
+package de.entrecode.datamanager_java_sdk.model;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.reflect.TypeToken;
+
+import java.io.Reader;
+
+/**
+ * Created by simon, entrecode GmbH, Stuttgart (Germany) on 08.06.15.
+ */
+public class ECResourceParser<T> {
+    private Gson gson;
+    private Class<T> mTypedClass;
+
+    public ECResourceParser(Class typedClass) {
+        mTypedClass = typedClass;
+        gson = getGson();
+    }
+
+    private Gson getGson() {
+        GsonBuilder builder = new GsonBuilder();
+        builder.registerTypeAdapter(ECEntry.class, new ECEntry.ECEntryJsonDeserializer());
+        builder.registerTypeAdapter(ECEntry.class, new ECEntry.ECEntryJsonSerializer());
+        Class clazz = new TypeToken<ECList<ECEntry>>() {
+        }.getRawType();
+        builder.registerTypeAdapter(clazz, new ECList.ECListJsonDeserializer<ECList<ECEntry>>(ECEntry.class));
+        return builder.create();
+    }
+
+    public String toJson(T obj) {
+        return gson.toJson(obj, mTypedClass);
+    }
+
+    public T fromJson(String json) {
+        return gson.fromJson(json, mTypedClass);
+    }
+
+    public T fromJson(Reader reader) {
+        return gson.fromJson(reader, mTypedClass);
+    }
+
+    public T fromJson(JsonElement json) {
+        return gson.fromJson(json, mTypedClass);
+    }
+}
