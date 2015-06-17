@@ -115,8 +115,6 @@ dm.model("myModel").entries()
 ```
 
 ### Get Entry
-TODO short hand hint. is `dm.model().entries(…, filter);`
-
 ```java
 dm.model("myModel").entry("alwoigei")
 	.onResponse(new ECResponseListener<ECEntry>{
@@ -388,7 +386,7 @@ Running tests with:
 Running tests with coverage:
 
 ```
-./gradlew coverage
+./gradlew jacocoTestReport
 ```
 
 # Changelog

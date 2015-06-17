@@ -79,14 +79,10 @@ public abstract class ECRequest<T> {
                             err.setCode(response.code());
                             mErrorListener.onError(err);
                         }
-                    } else {
-                        System.out.println(response.code());
                     }
                 } else {
                     if (mResponseListener != null) {
                         mResponseListener.onResponse(buildResponse(response.body().charStream()));
-                    } else {
-                        System.out.println(response);
                     }
                 }
             }

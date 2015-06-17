@@ -24,7 +24,7 @@ public class Model {
     }
 
     public ECEntryRequest entry(String id) {
-        return (ECEntryRequest) new ECEntryRequest(mDataManager, mModelID, id);
+        return new ECEntryRequest(mDataManager, mModelID, id);
     }
 
     public ECEntryPostRequest createEntry(ECEntry entry) {
