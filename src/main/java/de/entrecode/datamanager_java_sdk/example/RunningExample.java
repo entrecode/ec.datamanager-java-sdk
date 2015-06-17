@@ -4,10 +4,13 @@ import de.entrecode.datamanager_java_sdk.DataManager;
 import de.entrecode.datamanager_java_sdk.Model;
 import de.entrecode.datamanager_java_sdk.exceptions.ECMalformedDataManagerIDException;
 import de.entrecode.datamanager_java_sdk.listener.ECErrorListener;
+import de.entrecode.datamanager_java_sdk.model.ECAsset;
 import de.entrecode.datamanager_java_sdk.model.ECEntry;
 
+import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -153,5 +156,11 @@ public class RunningExample {
                 .onResponse(assets -> {
                     System.out.println(assets);
                 }).onError(errorListener).go();
+
+        dataManagerAssets.asset("4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd")
+                .onResponse(asset -> {
+                    System.out.println(asset);
+                })
+                .onError(errorListener).go();
     }
 }

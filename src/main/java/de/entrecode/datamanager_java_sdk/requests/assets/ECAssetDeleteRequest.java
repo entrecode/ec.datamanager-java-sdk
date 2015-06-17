@@ -16,6 +16,6 @@ public class ECAssetDeleteRequest extends ECDeleteRequest {
 
     @Override
     public Request build() {
-        return new Request.Builder().url(selfRef).addHeader("Authorization", "Bearer " + mAuthHeaderValue).build();
+        return new Request.Builder().url(selfRef).addHeader("Authorization", "Bearer " + mAuthHeaderValue).delete().build();
     }
 }

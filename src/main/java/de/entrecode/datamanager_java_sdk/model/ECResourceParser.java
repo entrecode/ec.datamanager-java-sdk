@@ -13,9 +13,17 @@ import java.io.Reader;
 public class ECResourceParser<T> {
     private Gson gson;
     private Class<T> mTypedClass;
+    private String entryOrAssetList;
 
     public ECResourceParser(Class typedClass) {
         mTypedClass = typedClass;
+        entryOrAssetList = "entry";
+        gson = getGson();
+    }
+
+    public ECResourceParser(Class typedClass, String entryOrAssetList) {
+        mTypedClass = typedClass;
+        this.entryOrAssetList = entryOrAssetList;
         gson = getGson();
     }
 
@@ -24,12 +32,15 @@ public class ECResourceParser<T> {
         builder.registerTypeAdapter(ECEntry.class, new ECEntry.ECEntryJsonDeserializer());
         builder.registerTypeAdapter(ECEntry.class, new ECEntry.ECEntryJsonSerializer());
         builder.registerTypeAdapter(ECAsset.class, new ECAsset.ECAssetJsonDeserializer());
-        Class clazz = new TypeToken<ECList<ECEntry>>() {
-        }.getRawType();
-        builder.registerTypeAdapter(clazz, new ECList.ECListJsonDeserializer<ECList<ECEntry>>(ECEntry.class));
-        Class clazz2 = new TypeToken<ECList<ECAsset>>() {
-        }.getRawType();
-        builder.registerTypeAdapter(clazz2, new ECList.ECListJsonDeserializer<ECList<ECAsset>>(ECAsset.class));
+        if (entryOrAssetList.equals("entry")) {
+            Class clazz = new TypeToken<ECList<ECEntry>>() {
+            }.getRawType();
+            builder.registerTypeAdapter(clazz, new ECList.ECListJsonDeserializer<ECList<ECEntry>>(ECEntry.class));
+        } else if (entryOrAssetList.equals("asset")) {
+            Class clazz2 = new TypeToken<ECList<ECAsset>>() {
+            }.getRawType();
+            builder.registerTypeAdapter(clazz2, new ECList.ECListJsonDeserializer<ECList<ECAsset>>(ECAsset.class));
+        }
         return builder.create();
     }
 

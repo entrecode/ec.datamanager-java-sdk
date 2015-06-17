@@ -1,30 +1,31 @@
 package de.entrecode.datamanager_java_sdk.requests.assets;
 
-import com.google.gson.reflect.TypeToken;
 import com.squareup.okhttp.HttpUrl;
 import com.squareup.okhttp.Request;
 import de.entrecode.datamanager_java_sdk.DataManager;
 import de.entrecode.datamanager_java_sdk.model.ECAsset;
-import de.entrecode.datamanager_java_sdk.model.ECList;
 import de.entrecode.datamanager_java_sdk.model.ECResourceParser;
 import de.entrecode.datamanager_java_sdk.requests.ECRequest;
 
+import java.io.IOException;
 import java.io.Reader;
 
 /**
- * Created by simon, entrecode GmbH, Stuttgart (Germany) on 11.06.15.
+ * Created by simon, entrecode GmbH, Stuttgart (Germany) on 17.06.15.
  */
-public class ECAssetsRequest extends ECRequest<ECList<ECAsset>> {
+public class ECAssetRequest extends ECRequest<ECAsset> {
     private final DataManager mDataManager;
+    private final String mID;
 
-    public ECAssetsRequest(DataManager dataManager) {
+    public ECAssetRequest(DataManager dataManager, String id) {
         mDataManager = dataManager;
+        mID = id;
     }
 
     @Override
     public Request build() {
         HttpUrl.Builder builder = HttpUrl.parse(mDataManager.getAssetUrl()).newBuilder();
-        addFilterToUrlBuilder(builder);
+        builder.addQueryParameter("assetID", mID);
         Request.Builder requestBuilder = new Request.Builder().url(builder.build());
         if (!mDataManager.getReadOnly()) {
             requestBuilder.addHeader("Authorization", "Bearer " + mDataManager.getToken().toString());
@@ -33,13 +34,11 @@ public class ECAssetsRequest extends ECRequest<ECList<ECAsset>> {
     }
 
     @Override
-    public ECList<ECAsset> buildResponse(Reader response) {
-        Class clazz = new TypeToken<ECList<ECAsset>>() {
-        }.getRawType();
-        ECList<ECAsset> res = new ECResourceParser<ECList<ECAsset>>(clazz, "asset").fromJson(response);
+    public ECAsset buildResponse(Reader response) throws IOException {
+        ECAsset out = new ECResourceParser<ECAsset>(ECAsset.class).fromJson(response);
         if (!mDataManager.getReadOnly()) {
-            res.setAuthHeaderValue(mDataManager.getToken().toString());
+            out.setAuthHeader(mDataManager.getToken().toString());
         }
-        return res;
+        return out;
     }
 }

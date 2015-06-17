@@ -40,6 +40,10 @@ public class ECAsset {
         }
     }
 
+    public void setAuthHeader(String authHeader) {
+        this.mAuthHeaderValue = authHeader;
+    }
+
     public static class ECAssetJsonDeserializer implements JsonDeserializer<ECAsset> {
         @Override
         public ECAsset deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
