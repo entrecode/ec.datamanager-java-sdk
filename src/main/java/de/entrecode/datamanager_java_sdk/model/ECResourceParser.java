@@ -23,9 +23,13 @@ public class ECResourceParser<T> {
         GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapter(ECEntry.class, new ECEntry.ECEntryJsonDeserializer());
         builder.registerTypeAdapter(ECEntry.class, new ECEntry.ECEntryJsonSerializer());
+        builder.registerTypeAdapter(ECAsset.class, new ECAsset.ECAssetJsonDeserializer());
         Class clazz = new TypeToken<ECList<ECEntry>>() {
         }.getRawType();
         builder.registerTypeAdapter(clazz, new ECList.ECListJsonDeserializer<ECList<ECEntry>>(ECEntry.class));
+        Class clazz2 = new TypeToken<ECList<ECAsset>>() {
+        }.getRawType();
+        builder.registerTypeAdapter(clazz2, new ECList.ECListJsonDeserializer<ECList<ECAsset>>(ECAsset.class));
         return builder.create();
     }
 

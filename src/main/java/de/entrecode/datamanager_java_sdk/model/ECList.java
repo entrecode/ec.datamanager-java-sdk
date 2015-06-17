@@ -39,6 +39,8 @@ public class ECList<T> {
         for (T elem : _embedded) {
             if (elem instanceof ECEntry) {
                 ((ECEntry) elem).mAuthHeaderValue = mAuthHeaderValue;
+            } else if (elem instanceof ECAsset) {
+                ((ECAsset) elem).mAuthHeaderValue = mAuthHeaderValue;
             }
         }
     }

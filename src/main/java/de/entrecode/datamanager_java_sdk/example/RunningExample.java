@@ -6,6 +6,8 @@ import de.entrecode.datamanager_java_sdk.exceptions.ECMalformedDataManagerIDExce
 import de.entrecode.datamanager_java_sdk.listener.ECErrorListener;
 import de.entrecode.datamanager_java_sdk.model.ECEntry;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -13,7 +15,7 @@ import java.util.UUID;
  * Created by Simon Scherzinger, entrecode GmbH, Stuttgart (Germany) on 08.06.15.
  */
 public class RunningExample {
-    public static void main(String[] args) throws ECMalformedDataManagerIDException {
+    public static void main(String[] args) throws ECMalformedDataManagerIDException, MalformedURLException {
         // Error Listener for ecErrors
         ECErrorListener errorListener = error -> System.out.println(error.stringify());
 
@@ -115,5 +117,41 @@ public class RunningExample {
                     System.out.println("Thumbnail: " + url);
                 })
                 .onError(errorListener).go();
+
+
+        DataManager dataManagerAssets = new DataManager(
+                new URL("https://datamanager.angus.entrecode.de/api/c024f209/"),
+                UUID.fromString("4c0fd785-bd08-4124-95b9-048467a9c0f6"));
+
+        ClassLoader cl = RunningExample.class.getClassLoader();
+        File file = new File(cl.getResource("test.jpg").getFile());
+
+        dataManagerAssets.createAsset(file)
+                .onResponse(assets -> {
+                    System.out.println(assets);
+                    assets.get(0).delete()
+                            .onResponse(ok -> {
+                                System.out.println("Deleted.");
+                            }).onError(errorListener).go();
+                })
+                .onError(errorListener).go();
+
+        dataManagerAssets.createAsset(
+                new ArrayList<File>() {{
+                    add(file);
+                    add(file);
+                }})
+                .onResponse(assets -> {
+                    System.out.println(assets);
+                    for (ECAsset a : assets) {
+                        a.delete().go();
+                    }
+                })
+                .onError(errorListener).go();
+
+        dataManagerAssets.assets()
+                .onResponse(assets -> {
+                    System.out.println(assets);
+                }).onError(errorListener).go();
     }
 }

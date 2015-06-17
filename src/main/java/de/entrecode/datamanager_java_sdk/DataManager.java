@@ -1,16 +1,21 @@
 package de.entrecode.datamanager_java_sdk;
 
+import de.entrecode.datamanager_java_sdk.exceptions.ECDataMangerInReadOnlyModeException;
 import de.entrecode.datamanager_java_sdk.exceptions.ECMalformedDataManagerIDException;
 import de.entrecode.datamanager_java_sdk.listener.ECResponseListener;
 import de.entrecode.datamanager_java_sdk.model.ECEntry;
+import de.entrecode.datamanager_java_sdk.requests.assets.ECAssetRequest;
+import de.entrecode.datamanager_java_sdk.requests.assets.ECAssetsPostRequest;
 import de.entrecode.datamanager_java_sdk.requests.assets.ECAssetsRequest;
 import de.entrecode.datamanager_java_sdk.requests.entries.ECEntryPostRequest;
 import de.entrecode.datamanager_java_sdk.requests.entries.ECEntryRequest;
 import de.entrecode.datamanager_java_sdk.requests.files.ECFileURLRequest;
 import de.entrecode.datamanager_java_sdk.requests.models.ECModelListRequest;
 
+import java.io.File;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -21,6 +26,7 @@ public class DataManager {
     private static final String baseAPIUrl = "https://datamanager.entrecode.de/api/";
 
     private String mUrl;
+    private String mAssetUrl;
     private String mID;
     private UUID mAccessToken;
     private boolean mReadOnly = false;
@@ -31,6 +37,7 @@ public class DataManager {
 
         appendSlashIfNeeded();
         makeID();
+        mAssetUrl = mUrl.replace("/api/" + mID + "/", "/asset/" + mID);
     }
 
     public DataManager(URL url, boolean readOnly) {
@@ -39,6 +46,7 @@ public class DataManager {
 
         appendSlashIfNeeded();
         makeID();
+        mAssetUrl = mUrl.replace("/api/" + mID + "/", "/asset/" + mID);
     }
 
     public DataManager(String id, UUID accessToken) throws ECMalformedDataManagerIDException {
@@ -48,6 +56,7 @@ public class DataManager {
 
         mID = id;
         mUrl = baseAPIUrl + id.toLowerCase() + "/";
+        mAssetUrl = mUrl.replace("/api/" + mID + "/", "/asset/" + mID);
         mAccessToken = accessToken;
     }
 
@@ -58,6 +67,7 @@ public class DataManager {
 
         mID = id;
         mUrl = baseAPIUrl + id.toLowerCase() + "/";
+        mAssetUrl = mUrl.replace("/api/" + mID + "/", "/asset/" + mID);
         mReadOnly = readOnly;
     }
 
@@ -101,12 +111,21 @@ public class DataManager {
         return mUrl;
     }
 
+    public String getAssetUrl() {
+        return mAssetUrl;
+    }
+
     public String getID() {
         return mID;
     }
 
     private void makeID() {
-        mID = mUrl.substring(mUrl.lastIndexOf("/"));
+        if (mUrl.endsWith("/")) {
+            mID = mUrl.substring(0, mUrl.length() - 1);
+        } else {
+            mID = mUrl;
+        }
+        mID = mID.substring(mID.lastIndexOf("/") + 1);
     }
 
     private void appendSlashIfNeeded() {
@@ -147,9 +166,23 @@ public class DataManager {
         return new ECAssetsRequest(this);
     }
 
-    public ECAssetsRequest asset(String id) {
-        return (ECAssetsRequest) this.assets().filter(new HashMap<String, String>() {{
-            put("assetID", id);
-        }});
+    public ECAssetRequest asset(String id) {
+        return new ECAssetRequest(this, id);
+    }
+
+    public ECAssetsPostRequest createAsset(File file) {
+        if (getReadOnly()) {
+            throw new ECDataMangerInReadOnlyModeException();
+        }
+
+        return new ECAssetsPostRequest(this, file);
+    }
+
+    public ECAssetsPostRequest createAsset(List<File> files) {
+        if (getReadOnly()) {
+            throw new ECDataMangerInReadOnlyModeException();
+        }
+
+        return new ECAssetsPostRequest(this, files);
     }
 }
