@@ -96,5 +96,24 @@ public class RunningExample {
                 })
                 .onError(errorListener).go();
 
+        dataManagerRW.getFileURL("b05e55b0-a8e7-4ed6-8cba-e6162acd53e5")
+                .onResponse(url -> {
+                    System.out.println("File: " + url);
+                })
+                .onError(errorListener).go();
+
+        dataManagerRW.getImageURL("b05e55b0-a8e7-4ed6-8cba-e6162acd53e5")
+                .size(245)
+                .onResponse(url -> {
+                    System.out.println("Image: " + url);
+                })
+                .onError(errorListener).go();
+
+        dataManagerRW.getImageThumbURL("b05e55b0-a8e7-4ed6-8cba-e6162acd53e5")
+                .size(55)
+                .onResponse(url -> {
+                    System.out.println("Thumbnail: " + url);
+                })
+                .onError(errorListener).go();
     }
 }
