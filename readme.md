@@ -57,9 +57,14 @@ DataManager.create(
   new URL("https://datamanager.entrecode.de/api/beefbeef",
   new ECResponseListener<DataManager>{
     @Override
-    public void onResponse(dataManager){
+    public void onResponse(DataManager dataManager){
     	dm = dataManager;
     }
+  }, new ECErrorListener{
+  	@Override
+  	public void onError(ECError error){
+  		System.out.println(error.stringify());
+  	}
   });
 ```
 
@@ -71,9 +76,14 @@ DataManager.create(
   "beefbeef",
   new ECResponseListener<DataManager>{
     @Override
-    public void onResponse(dataManager){
+    public void onResponse(DataManager dataManager){
     	dm = dataManager;
     }
+  }, new ECErrorListener{
+  	@Override
+  	public void onError(ECError error){
+  		System.out.println(error.stringify());
+  	}
   });
 ```
 

@@ -2,6 +2,7 @@ package de.entrecode.datamanager_java_sdk;
 
 import de.entrecode.datamanager_java_sdk.exceptions.ECDataMangerInReadOnlyModeException;
 import de.entrecode.datamanager_java_sdk.exceptions.ECMalformedDataManagerIDException;
+import de.entrecode.datamanager_java_sdk.listener.ECErrorListener;
 import de.entrecode.datamanager_java_sdk.listener.ECResponseListener;
 import de.entrecode.datamanager_java_sdk.model.ECEntry;
 import de.entrecode.datamanager_java_sdk.requests.assets.ECAssetRequest;
@@ -14,7 +15,6 @@ import de.entrecode.datamanager_java_sdk.requests.models.ECModelListRequest;
 
 import java.io.File;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -71,24 +71,24 @@ public class DataManager {
         mReadOnly = readOnly;
     }
 
-    public static void create(URL url, ECResponseListener<DataManager> responseListener) throws ECMalformedDataManagerIDException {
+    public static void create(URL url, ECResponseListener<DataManager> responseListener, ECErrorListener errorListener) throws ECMalformedDataManagerIDException {
         DataManager dm = new DataManager(url, true);
 
         dm.register().onResponse(user -> {
             dm.setToken(UUID.fromString(String.valueOf(user.get("temporaryToken"))));
             dm.setReadOnly(false);
             responseListener.onResponse(dm);
-        }).go();
+        }).onError(errorListener).go();
     }
 
-    public static void create(String id, ECResponseListener<DataManager> responseListener) throws ECMalformedDataManagerIDException {
+    public static void create(String id, ECResponseListener<DataManager> responseListener, ECErrorListener errorListener) throws ECMalformedDataManagerIDException {
         DataManager dm = new DataManager(id, true);
 
         dm.register().onResponse(user -> {
             dm.setToken(UUID.fromString(String.valueOf(user.get("temporaryToken"))));
             dm.setReadOnly(false);
             responseListener.onResponse(dm);
-        }).go();
+        }).onError(errorListener).go();
     }
 
     public UUID getToken() {
