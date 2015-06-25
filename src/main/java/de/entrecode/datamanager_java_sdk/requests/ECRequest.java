@@ -17,7 +17,7 @@ import java.util.Map;
 public abstract class ECRequest<T> {
     private final OkHttpClient mClient = new OkHttpClient();
 
-    protected String mMethod = "get";
+    protected String mMethod = "GET";
     private HashMap<String, String> mFilter;
     private int mSize = 10;
     private int mPage = 1;

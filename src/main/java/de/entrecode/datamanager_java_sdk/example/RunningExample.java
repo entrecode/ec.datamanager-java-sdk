@@ -22,6 +22,12 @@ public class RunningExample {
         // Error Listener for ecErrors
         ECErrorListener errorListener = error -> System.out.println(error.stringify());
 
+        DataManager.create("f84710b8", dm -> {
+            // here we have a datamanager
+        }, error -> {
+            System.out.println(error.stringify());
+        });
+
         DataManager dataManagerReadOnly = new DataManager("f84710b8", true);
 
         dataManagerReadOnly.modelList()

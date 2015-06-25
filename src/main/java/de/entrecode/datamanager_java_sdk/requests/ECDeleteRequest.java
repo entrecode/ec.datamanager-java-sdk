@@ -11,7 +11,7 @@ public abstract class ECDeleteRequest extends ECRequest<Boolean> {
 
     public ECDeleteRequest(String authHeaderValue) {
         mAuthHeaderValue = authHeaderValue;
-        mMethod = "delete";
+        mMethod = "DELETE";
     }
 
     @Override

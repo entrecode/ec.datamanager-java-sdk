@@ -41,6 +41,9 @@ public class DataManager {
     }
 
     public DataManager(URL url, boolean readOnly) {
+        if (!readOnly) {
+            throw new IllegalArgumentException("Read Only must be true.");
+        }
         mUrl = url.toString();
         mReadOnly = readOnly;
 
@@ -61,6 +64,9 @@ public class DataManager {
     }
 
     public DataManager(String id, boolean readOnly) throws ECMalformedDataManagerIDException {
+        if (!readOnly) {
+            throw new IllegalArgumentException("Read Only must be true.");
+        }
         if (!id.matches(shortIDRegEx)) {
             throw new ECMalformedDataManagerIDException("Malformed Data Manager ID given.");
         }
@@ -120,12 +126,8 @@ public class DataManager {
     }
 
     private void makeID() {
-        if (mUrl.endsWith("/")) {
-            mID = mUrl.substring(0, mUrl.length() - 1);
-        } else {
-            mID = mUrl;
-        }
-        mID = mID.substring(mID.lastIndexOf("/") + 1);
+        mID = mUrl.substring(0, mUrl.length() - 1); // remove last char (always "/")
+        mID = mID.substring(mID.lastIndexOf("/") + 1); // get substring from last "/" (is shortID)
     }
 
     private void appendSlashIfNeeded() {

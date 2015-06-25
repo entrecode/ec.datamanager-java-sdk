@@ -19,6 +19,6 @@ public class ECEntryDeleteRequest extends ECDeleteRequest {
 
     @Override
     public Request build() {
-        return new Request.Builder().url(mUrl).method(this.mMethod, null).addHeader("Authorization", "Bearer " + mAuthHeaderValue).build();
+        return new Request.Builder().url(mUrl).delete().addHeader("Authorization", "Bearer " + mAuthHeaderValue).build();
     }
 }

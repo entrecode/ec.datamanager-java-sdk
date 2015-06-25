@@ -11,7 +11,7 @@ public abstract class ECPutRequest<T> extends ECRequest<T> {
 
     public ECPutRequest(String authHeaderValue) {
         mAuthHeaderValue = authHeaderValue;
-        mMethod = "put";
+        mMethod = "PUT";
     }
 
     public ECPutRequest body(RequestBody body) {

@@ -19,7 +19,6 @@ public class ECSchemaRequest extends ECRequest<JsonObject> {
         add("get");
         add("put");
         add("post");
-        add("delete");
     }};
 
     protected final DataManager mDataManager;

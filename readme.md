@@ -196,9 +196,9 @@ ecEntry.save()
 
 ```java
 dm.modelList()
-	.onResponse(new ECResponseListener<ECModelList>{
+	.onResponse(new ECResponseListener<List<Model>>{
 		@Override
-		public void onResponse(ECModelList models){
+		public void onResponse(List<Model> models){
 			// TODO something
 		}
 	}).go();
@@ -209,9 +209,9 @@ dm.modelList()
 ```java
 dm.model("myModel").getSchema()
 	.forMethod("PUT")
-	.onResponse(new ECResponseListener<ECJsonSchema>{
+	.onResponse(new ECResponseListener<JsonObject>{
 		@Override
-		public void onResponse(ECJsonSchema schema){
+		public void onResponse(JsonObject schema){
 			// TODO something
 		}
 	})
@@ -257,7 +257,7 @@ dm.model("user").entry("lsadklja")
 	.onResponse(new ECResponseListener<ECEntry>{
 		@Override
 		public void onResponse(ECEntry user){
-			// TODO ?!? how to edit
+			user.set("name", "André Code");
 			user.save()
 				.onResponse(new ECREsponseListener<ECEntry>{
 					@Override

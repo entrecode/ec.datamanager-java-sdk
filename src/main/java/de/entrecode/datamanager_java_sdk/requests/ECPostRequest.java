@@ -11,7 +11,7 @@ public abstract class ECPostRequest<T> extends ECRequest<T> {
 
     public ECPostRequest(String authHeaderValue) {
         mAuthHeaderValue = authHeaderValue;
-        mMethod = "post";
+        mMethod = "POST";
     }
 
     public ECRequest body(RequestBody body) {

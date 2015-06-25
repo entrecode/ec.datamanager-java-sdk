@@ -36,11 +36,13 @@ public class ECList<T> {
     }
 
     private void injectAuthHeaderToEmbedded() {
-        for (T elem : _embedded) {
-            if (elem instanceof ECEntry) {
-                ((ECEntry) elem).mAuthHeaderValue = mAuthHeaderValue;
-            } else if (elem instanceof ECAsset) {
-                ((ECAsset) elem).mAuthHeaderValue = mAuthHeaderValue;
+        if (_embedded != null) {
+            for (T elem : _embedded) {
+                if (elem instanceof ECEntry) {
+                    ((ECEntry) elem).mAuthHeaderValue = mAuthHeaderValue;
+                } else if (elem instanceof ECAsset) {
+                    ((ECAsset) elem).mAuthHeaderValue = mAuthHeaderValue;
+                }
             }
         }
     }

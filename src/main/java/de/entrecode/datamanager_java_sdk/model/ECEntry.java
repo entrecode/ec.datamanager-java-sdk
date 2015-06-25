@@ -3,6 +3,7 @@ package de.entrecode.datamanager_java_sdk.model;
 import com.google.gson.*;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.RequestBody;
+import de.entrecode.datamanager_java_sdk.exceptions.ECDataMangerInReadOnlyModeException;
 import de.entrecode.datamanager_java_sdk.requests.entries.ECEntryDeleteRequest;
 import de.entrecode.datamanager_java_sdk.requests.entries.ECEntrySaveRequest;
 
@@ -24,20 +25,9 @@ public class ECEntry {
 
     private JsonObject _links;
 
-    public ECEntry(String authHeaderValue) {
-        mAuthHeaderValue = authHeaderValue;
-    }
-
     public ECEntry() {
         values = new HashMap<>();
         isPrivate = false;
-    }
-
-    public ECEntry(String id, String created, String modified, boolean isPrivate) {
-        this.id = id;
-        this.created = created;
-        this.modified = modified;
-        this.isPrivate = isPrivate;
     }
 
     private void setValues(HashMap<String, Object> values) {
@@ -80,12 +70,20 @@ public class ECEntry {
     }
 
     public ECEntryDeleteRequest delete() {
+        if (mAuthHeaderValue == null) {
+            throw new ECDataMangerInReadOnlyModeException();
+        }
+
         return new ECEntryDeleteRequest(
                 mAuthHeaderValue,
                 _links.getAsJsonObject("self").get("href").getAsString());
     }
 
     public ECEntrySaveRequest save() {
+        if (mAuthHeaderValue == null) {
+            throw new ECDataMangerInReadOnlyModeException();
+        }
+
         return (ECEntrySaveRequest) new ECEntrySaveRequest(
                 mAuthHeaderValue,
                 _links.getAsJsonObject("self")
@@ -95,6 +93,14 @@ public class ECEntry {
     public RequestBody toBody() {
         RequestBody b = RequestBody.create(MediaType.parse("application/json"), new ECResourceParser<ECEntry>(ECEntry.class).toJson(this));
         return b;
+    }
+
+    public JsonObject getLinks() {
+        return _links;
+    }
+
+    public void setLinks(JsonObject links) {
+        this._links = links;
     }
 
     public static class ECEntryJsonDeserializer implements JsonDeserializer<ECEntry> {
@@ -171,15 +177,17 @@ public class ECEntry {
                 out.add("_links", src._links);
             }
 
-            for (Map.Entry elem : src.values.entrySet()) {
-                if (elem.getValue() instanceof Boolean) {
-                    out.addProperty(String.valueOf(elem.getKey()), (boolean) elem.getValue());
-                } else if (elem.getValue() instanceof String) {
-                    out.addProperty(String.valueOf(elem.getKey()), String.valueOf(elem.getValue()));
-                } else if (elem.getValue() instanceof Number) {
-                    out.addProperty(String.valueOf(elem.getKey()), (Number) elem.getValue());
-                } else {
-                    out.add(String.valueOf(elem.getKey()), (JsonElement) elem.getValue());
+            if (src.values != null) {
+                for (Map.Entry elem : src.values.entrySet()) {
+                    if (elem.getValue() instanceof Boolean) {
+                        out.addProperty(String.valueOf(elem.getKey()), (boolean) elem.getValue());
+                    } else if (elem.getValue() instanceof String) {
+                        out.addProperty(String.valueOf(elem.getKey()), String.valueOf(elem.getValue()));
+                    } else if (elem.getValue() instanceof Number) {
+                        out.addProperty(String.valueOf(elem.getKey()), (Number) elem.getValue());
+                    } else {
+                        out.add(String.valueOf(elem.getKey()), (JsonElement) elem.getValue());
+                    }
                 }
             }
 
