@@ -80,7 +80,7 @@ public abstract class ECRequest<T> {
                             mErrorListener.onError(err);
                         } catch (Exception e) {
                             ECError err = new ECError("Unmatched ECError.");
-                            err.setCode(response.code());
+                            err.setStatus(response.code());
                             mErrorListener.onError(err);
                         }
                     }

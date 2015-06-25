@@ -52,6 +52,7 @@ public class ECAssetsPostRequest extends ECPostRequest<List<ECAsset>> {
                 //builder.addPart(RequestBody.create(MediaType.parse(mediaType), f));
                 builder.addFormDataPart("file", f.getName(), RequestBody.create(MediaType.parse(mediaType), f));
             } catch (Exception e) {
+                // This should never happen…
                 System.out.println("Could not add file to multipart form.");
                 e.printStackTrace();
             }

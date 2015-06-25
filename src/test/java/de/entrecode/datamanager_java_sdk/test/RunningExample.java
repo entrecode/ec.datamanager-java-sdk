@@ -1,4 +1,4 @@
-package de.entrecode.datamanager_java_sdk.example;
+package de.entrecode.datamanager_java_sdk.test;
 
 import de.entrecode.datamanager_java_sdk.DataManager;
 import de.entrecode.datamanager_java_sdk.Model;

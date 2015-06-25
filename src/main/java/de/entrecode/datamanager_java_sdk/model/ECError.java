@@ -38,40 +38,21 @@ public class ECError {
         return code;
     }
 
-    public void setCode(int code) {
-        this.code = code;
-    }
-
     public String getTitle() {
         return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public String getType() {
         return type;
     }
 
-    public void setType(String type) {
-        this.type = type;
-    }
-
     public String getDetail() {
         return detail;
     }
 
-    public void setDetail(String detail) {
-        this.detail = detail;
-    }
 
     public String getVerbose() {
         return verbose;
-    }
-
-    public void setVerbose(String verbose) {
-        this.verbose = verbose;
     }
 
     public JsonElement getEmbedded() {
@@ -84,13 +65,16 @@ public class ECError {
 
     public String stringify() {
         StringBuilder b = new StringBuilder();
-        b.append(status + ", " + code + ", ");
-        b.append(title);
-        if (detail != null && detail.length() > 0) {
-            b.append(" - " + detail);
+        b.append(getStatus() + ", " + getCode() + ", ");
+        b.append(getTitle());
+        if (getDetail() != null && getDetail().length() > 0) {
+            b.append(" - " + getDetail());
         }
-        if (verbose != null && verbose.length() > 0) {
-            b.append(" - " + verbose);
+        if (getVerbose() != null && getVerbose().length() > 0) {
+            b.append(" - " + getVerbose());
+        }
+        if (getType() != null & getType().length() > 0) {
+            b.append(" - " + getType());
         }
 
         return b.toString();

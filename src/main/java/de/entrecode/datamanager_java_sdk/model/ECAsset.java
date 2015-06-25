@@ -2,6 +2,7 @@ package de.entrecode.datamanager_java_sdk.model;
 
 import com.google.gson.*;
 import de.entrecode.datamanager_java_sdk.DataManager;
+import de.entrecode.datamanager_java_sdk.exceptions.ECDataMangerInReadOnlyModeException;
 import de.entrecode.datamanager_java_sdk.requests.ECDeleteRequest;
 import de.entrecode.datamanager_java_sdk.requests.assets.ECAssetDeleteRequest;
 
@@ -20,11 +21,12 @@ public class ECAsset {
     private String created;
     private JsonArray files;
     private String[] tags;
-
     private JsonObject _links;
 
     public ECAsset(DataManager mDataManager, String selfRef, String title) {
-        this.mAuthHeaderValue = mDataManager.getToken().toString();
+        if (mDataManager.getToken() != null) {
+            this.mAuthHeaderValue = mDataManager.getToken().toString();
+        }
         this.selfRef = selfRef;
         this.title = title;
     }
@@ -32,7 +34,47 @@ public class ECAsset {
     public ECAsset() {
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public String getCreated() {
+        return created;
+    }
+
+    public JsonArray getFiles() {
+        return files;
+    }
+
+    public void setFiles(JsonArray files) {
+        this.files = files;
+    }
+
+    public String[] getTags() {
+        return tags;
+    }
+
+    public void setTags(String[] tags) {
+        this.tags = tags;
+    }
+
+    public String getAssetID() {
+        return assetID;
+    }
+
     public ECDeleteRequest delete() {
+        if (mAuthHeaderValue == null) {
+            throw new ECDataMangerInReadOnlyModeException();
+        }
+
         if (selfRef != null) {
             return new ECAssetDeleteRequest(mAuthHeaderValue, selfRef);
         } else {
@@ -50,12 +92,12 @@ public class ECAsset {
             ECAsset out = new ECAsset();
             JsonObject in = json.getAsJsonObject();
             out.assetID = in.get("assetID").getAsString();
-            out.title = in.get("title").getAsString();
+            out.setTitle(in.get("title").getAsString());
             out.type = in.get("type").getAsString();
             out.created = in.get("created").getAsString();
-            out.files = context.deserialize(in.get("files"), JsonArray.class);
+            out.setFiles(context.deserialize(in.get("files"), JsonArray.class));
             if (in.has("tags")) {
-                out.tags = context.deserialize(in.get("tags"), String[].class);
+                out.setTags(context.deserialize(in.get("tags"), String[].class));
             }
             out._links = context.deserialize(in.get("_links"), JsonObject.class);
             return out;

@@ -48,10 +48,6 @@ public class ECResourceParser<T> {
         return gson.toJson(obj, mTypedClass);
     }
 
-    public T fromJson(String json) {
-        return gson.fromJson(json, mTypedClass);
-    }
-
     public T fromJson(Reader reader) {
         return gson.fromJson(reader, mTypedClass);
     }

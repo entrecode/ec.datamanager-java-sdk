@@ -118,11 +118,7 @@ public class ECEntry {
             if (obj.has("modified")) {
                 out.modified = obj.get("modified").getAsString();
             }
-            if (obj.has("private")) {
-                out.isPrivate = obj.get("private").getAsBoolean();
-            } else {
-                out.isPrivate = false;
-            }
+            out.isPrivate = obj.has("private") && obj.get("private").getAsBoolean();
             if (obj.has("_links")) {
                 out._links = obj.get("_links").getAsJsonObject();
             }

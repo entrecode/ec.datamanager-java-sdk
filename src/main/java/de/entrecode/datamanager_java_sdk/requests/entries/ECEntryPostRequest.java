@@ -1,11 +1,9 @@
 package de.entrecode.datamanager_java_sdk.requests.entries;
 
-import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.squareup.okhttp.HttpUrl;
 import com.squareup.okhttp.Request;
 import de.entrecode.datamanager_java_sdk.Model;
-import de.entrecode.datamanager_java_sdk.exceptions.ECDataMangerInReadOnlyModeException;
 import de.entrecode.datamanager_java_sdk.model.ECEntry;
 import de.entrecode.datamanager_java_sdk.model.ECList;
 import de.entrecode.datamanager_java_sdk.model.ECResourceParser;
@@ -26,10 +24,6 @@ public class ECEntryPostRequest extends ECPostRequest<ECEntry> {
 
     @Override
     public Request build() {
-        if (mModel.getDataManager().getReadOnly() && !mModel.getModelID().equals("user")) {
-            throw new ECDataMangerInReadOnlyModeException();
-        }
-
         HttpUrl.Builder urlBuilder = HttpUrl.parse(mModel.getDataManager().getUrl() + mModel.getModelID()).newBuilder();
         Request.Builder builder = new Request.Builder().url(urlBuilder.build());
         builder.post(mBody);
