@@ -2,20 +2,23 @@ group 'de.entrecode'
 version '0.2.0-SNAPSHOT'
 
 apply plugin: 'java'
-apply plugin: "jacoco"
-
+apply plugin: 'jacoco'
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 
+//noinspection GroovyAssignabilityCheck
 dependencies {
     testCompile 'junit:junit:4.11'
     testCompile 'com.squareup.okhttp:mockwebserver:2.4.0'
+    testCompile 'com.jayway.awaitility:awaitility:1.6.3'
     compile 'com.squareup.okhttp:okhttp:2.4.0'
     compile 'com.google.code.gson:gson:2.3.1'
 }
 
+//noinspection GroovyAssignabilityCheck
 test {
     // we always want the tests to be executed
     outputs.upToDateWhen { false }
