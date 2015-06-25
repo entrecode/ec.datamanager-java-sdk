@@ -276,9 +276,9 @@ The SDK can help you getting asset files, and image assets in the right sizes.
 ```java
 dm.getFileURL("46092f02-7441-4759-b6ff-8f3831d3da4b")
 	.locale("en-US")
-	.onResponse(new ECResponseListener<URL>{
+	.onResponse(new ECResponseListener<String>{
 		@Override
-		public void onResponse(URL url){
+		public void onResponse(String url){
 			// TODO something
 		}
 	}).go();
@@ -289,9 +289,9 @@ For image Assets, the following helper is available:
 ```java
 dm.getImageURL("46092f02-7441-4759-b6ff-8f3831d3da4b")
 	.size(500)
-	.onResponse(new ECResponseListener<URL>{
+	.onResponse(new ECResponseListener<String>{
 		@Override
-		public void onResponse(URL url){
+		public void onResponse(String url){
 			// TODO something
 		}
 	}).go();
@@ -301,9 +301,9 @@ dm.getImageURL("46092f02-7441-4759-b6ff-8f3831d3da4b")
 dm.getFileURL("46092f02-7441-4759-b6ff-8f3831d3da4b")
 	.image()
 	.size(500)
-	.onResponse(new ECResponseListener<URL>{
+	.onResponse(new ECResponseListener<String>{
 		@Override
-		public void onResponse(URL url){
+		public void onResponse(String url){
 			// TODO something
 		}
 	}).go();
@@ -315,9 +315,9 @@ You can also request a thumbnail:
 ```java
 dm.getImageThumbURL("46092f02-7441-4759-b6ff-8f3831d3da4b")
 	.size(100)
-	.onResponse(new ECResponseListener<URL>{
+	.onResponse(new ECResponseListener<String>{
 		@Override
-		public void onResponse(URL url){
+		public void onResponse(String url){
 			// TODO something
 		}
 	}).go();
@@ -327,9 +327,9 @@ dm.getImageThumbURL("46092f02-7441-4759-b6ff-8f3831d3da4b")
 dm.getImageURL("46092f02-7441-4759-b6ff-8f3831d3da4b")
 	.size(500)
 	.crop()
-	.onResponse(new ECResponseListener<URL>{
+	.onResponse(new ECResponseListener<String>{
 		@Override
-		public void onResponse(URL url){
+		public void onResponse(String url){
 			// TODO something
 		}
 	}).go();

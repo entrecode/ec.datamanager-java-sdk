@@ -1,8 +1,10 @@
 package de.entrecode.datamanager_java_sdk.requests.files;
 
+import com.google.gson.JsonObject;
 import com.squareup.okhttp.HttpUrl;
 import com.squareup.okhttp.Request;
 import de.entrecode.datamanager_java_sdk.DataManager;
+import de.entrecode.datamanager_java_sdk.model.ECResourceParser;
 import de.entrecode.datamanager_java_sdk.requests.ECRequest;
 
 import java.io.IOException;
@@ -47,6 +49,10 @@ public class ECFileURLRequest extends ECRequest<String> {
 
     @Override
     public Request build() {
+        if (isImage && isThumbnail && mSize == -1) {
+            throw new IllegalArgumentException("Must specify size for thumbnail request");
+        }
+
         HttpUrl.Builder urlBuilder = HttpUrl.parse(this.mDataManager.getUrl()
                 .replace("datamanager", "f")
                 .replace("api/" + this.mDataManager.getID() + "/", mAssetID) + "/url").newBuilder();
@@ -79,15 +85,7 @@ public class ECFileURLRequest extends ECRequest<String> {
 
     @Override
     public String buildResponse(Reader response) throws IOException {
-        StringBuilder builder = new StringBuilder();
-        int charsRead = -1;
-        char[] chars = new char[100];
-        do {
-            charsRead = response.read(chars, 0, chars.length);
-            //if we have valid chars, append them to end of string.
-            if (charsRead > 0)
-                builder.append(chars, 0, charsRead);
-        } while (charsRead > 0);
-        return builder.toString();
+        JsonObject url = new ECResourceParser<JsonObject>(JsonObject.class).fromJson(response);
+        return url.get("url").getAsString();
     }
 }

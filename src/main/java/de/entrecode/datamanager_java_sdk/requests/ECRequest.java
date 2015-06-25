@@ -72,8 +72,12 @@ public abstract class ECRequest<T> {
                 if (!response.isSuccessful()) { // not in 200…300 range
                     if (mErrorListener != null) {
                         try {
-                            ResponseBody rb = response.body();
-                            mErrorListener.onError(new ECResourceParser<ECError>(ECError.class).fromJson(response.body().charStream()));
+                            ECError err = new ECResourceParser<ECError>(ECError.class).fromJson(response.body().charStream());
+                            if (err == null) {
+                                err = new ECError("Unmatched ECError.");
+                                err.setStatus(response.code());
+                            }
+                            mErrorListener.onError(err);
                         } catch (Exception e) {
                             ECError err = new ECError("Unmatched ECError.");
                             err.setCode(response.code());

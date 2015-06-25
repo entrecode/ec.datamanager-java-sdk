@@ -37,6 +37,17 @@ public class DataManagerTest {
             switch (request.getMethod()) {
                 case "GET":
                     switch (request.getPath()) {
+                        case "/4e430eb2-aaaa-4f76-9f68-b4b4bacdc7dd/url":
+                        case "/4e430eb2-aaaa-4f76-9f68-b4b4bacdc7dd/url?nocrop=true":
+                        case "/4e430eb2-aaaa-4f76-9f68-b4b4bacdc7dd/url?nocrop=false&size=200":
+                            return new MockResponse().setResponseCode(404);
+                        case "/4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd/url?nocrop=false&size=200":
+                            return new MockResponse().setResponseCode(200).setBody("{\"url\":\"https://ec-datamanager-default-bucket.s3.amazonaws.com//home/www/datamanagerfiles/c024f209/rcf4bgN0mQWl35PuQ8w08SVh_200.jpg\"}");
+                        case "/4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd/url?nocrop=true&size=200":
+                            return new MockResponse().setResponseCode(200).setBody("{\"url\":\"https://ec-datamanager-default-bucket.s3.amazonaws.com//home/www/datamanagerfiles/c024f209/rcf4bgN0mQWl35PuQ8w08SVh_256.jpg\"}");
+                        case "/4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd/url":
+                        case "/4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd/url?nocrop=true":
+                            return new MockResponse().setResponseCode(200).setBody("{\"url\":\"https://ec-datamanager-default-bucket.s3.amazonaws.com//home/www/datamanagerfiles/c024f209/rcf4bgN0mQWl35PuQ8w08SVh.jpg\"}");
                         case "/api/beef1234/to-do-item-single?size=10&page=1":
                             return new MockResponse().setResponseCode(200).setBody("{\"count\":1,\"total\":1,\"_links\":{\"collection\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234\"},\"curies\":{\"name\":\"beef1234\",\"href\":\"https://datamanager.entrecode.de/api/doc/beef1234/{rel}\",\"templated\":true},\"self\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/to-do-item-single\"},\"beef1234:to-do-item-single/options\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/to-do-item{?created,createdFrom,createdTo,done,id,modified,modifiedFrom,modifiedTo,page,private,size,sort,todo-text,todo-text~}\",\"templated\":true}},\"_embedded\":{\"beef1234:to-do-item-single\":{\"id\":\"VJY4n7vcI\",\"created\":\"2015-06-17T13:22:27.404Z\",\"modified\":\"2015-06-17T13:22:27.404Z\",\"private\":false,\"done\":false,\"todo-text\":\"Test text\",\"_links\":{\"collection\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/to-do-item-single\"},\"self\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/to-do-item-single?id=VJY4n7vcI\"},\"beef1234:to-do-item/creator\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/user?id=QkHCflm2\"}}}}}");
                         case "/api/beef1234/to-do-item-multiple?size=10&page=1":
@@ -588,40 +599,80 @@ public class DataManagerTest {
 
     @Test
     public void getFile() throws IOException {
-        fail();
+        DataManager dm = new DataManager(baseUrl, true);
+        String[] url = new String[1];
+        dm.getFileURL("4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd").onResponse(r -> url[0] = r).onError(e -> fail(e.stringify())).go();
+
+        await().until(() -> url[0] != null);
+        assertEquals("https://ec-datamanager-default-bucket.s3.amazonaws.com//home/www/datamanagerfiles/c024f209/rcf4bgN0mQWl35PuQ8w08SVh.jpg", url[0]);
     }
 
     @Test
     public void getFileNonexistent() throws IOException {
-        fail();
+        ECError[] error = new ECError[1];
+        DataManager dm = new DataManager(baseUrl, true);
+        dm.getFileURL("4e430eb2-aaaa-4f76-9f68-b4b4bacdc7dd").onResponse(r -> fail()).onError(e -> error[0] = e).go();
+
+        await().until(() -> error[0] != null);
+        assertEquals(404, error[0].getStatus());
     }
 
     @Test
     public void getImage() throws IOException {
-        fail();
+        DataManager dm = new DataManager(baseUrl, true);
+        String[] url = new String[1];
+        dm.getImageURL("4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd").onResponse(r -> url[0] = r).onError(e -> fail(e.stringify())).go();
+
+        await().until(() -> url[0] != null);
+        assertEquals("https://ec-datamanager-default-bucket.s3.amazonaws.com//home/www/datamanagerfiles/c024f209/rcf4bgN0mQWl35PuQ8w08SVh.jpg", url[0]);
     }
 
     @Test
     public void getImageSize() throws IOException {
-        fail();
-    }
+        DataManager dm = new DataManager(baseUrl, true);
+        String[] url = new String[1];
+        dm.getImageURL("4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd").size(200).onResponse(r -> url[0] = r).onError(e -> fail(e.stringify())).go();
 
-    // TODO more image size filter?
+        await().until(() -> url[0] != null);
+        assertEquals("https://ec-datamanager-default-bucket.s3.amazonaws.com//home/www/datamanagerfiles/c024f209/rcf4bgN0mQWl35PuQ8w08SVh_256.jpg", url[0]);
+    }
 
     @Test
     public void getImageNonexistent() throws IOException {
-        fail();
+        ECError[] error = new ECError[1];
+        DataManager dm = new DataManager(baseUrl, true);
+        dm.getImageURL("4e430eb2-aaaa-4f76-9f68-b4b4bacdc7dd").onResponse(r -> fail()).onError(e -> error[0] = e).go();
+
+        await().until(() -> error[0] != null);
+        assertEquals(404, error[0].getStatus());
     }
 
     @Test
     public void getThumb() throws IOException {
-        fail();
+        DataManager dm = new DataManager(baseUrl, true);
+        String[] url = new String[1];
+        dm.getImageThumbURL("4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd").size(200).onResponse(r -> url[0] = r).onError(e -> fail(e.stringify())).go();
+
+        await().until(() -> url[0] != null);
+        assertEquals("https://ec-datamanager-default-bucket.s3.amazonaws.com//home/www/datamanagerfiles/c024f209/rcf4bgN0mQWl35PuQ8w08SVh_200.jpg", url[0]);
     }
 
     @Test
     public void getTumbNonexistent() throws IOException {
-        fail();
+        ECError[] error = new ECError[1];
+        DataManager dm = new DataManager(baseUrl, true);
+        dm.getImageThumbURL("4e430eb2-aaaa-4f76-9f68-b4b4bacdc7dd").size(200).onResponse(r -> fail()).onError(e -> error[0] = e).go();
+
+        await().until(() -> error[0] != null);
+        assertEquals(404, error[0].getStatus());
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void getThumbNoSize() {
+        DataManager dm = new DataManager(baseUrl, true);
+        dm.getImageThumbURL("4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd").onResponse(r -> fail()).onError(e -> fail(e.stringify())).go();
+    }
+
 
     @Test
     public void assetsOne() throws IOException {
