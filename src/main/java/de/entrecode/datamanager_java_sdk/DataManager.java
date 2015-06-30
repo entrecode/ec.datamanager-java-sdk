@@ -72,7 +72,7 @@ public class DataManager {
      *
      * @param id          The short id of the Data Manager to connect to. Will result in a connection to https://datamanager.entrecode.de/api/'id'
      * @param accessToken Previously acquired access token of public user.
-     * @throws ECMalformedDataManagerIDException
+     * @throws ECMalformedDataManagerIDException Thrown when short id of Data Manager is malformed.
      */
     public DataManager(String id, UUID accessToken) throws ECMalformedDataManagerIDException {
         if (!id.matches(shortIDRegEx)) {
@@ -90,7 +90,7 @@ public class DataManager {
      *
      * @param id       The short id of the Data Manager to connect to. Will result in a connection to https://datamanager.entrecode.de/api/'id'
      * @param readOnly Flag indicating read only mode. Only true is an acceptable input.
-     * @throws ECMalformedDataManagerIDException
+     * @throws ECMalformedDataManagerIDException Thrown when short id of Data Manager is malformed.
      */
     public DataManager(String id, boolean readOnly) throws ECMalformedDataManagerIDException {
         if (!readOnly) {
@@ -129,7 +129,7 @@ public class DataManager {
      * @param id               The short id of the Data Manager to connect to. Will result in a connection to https://datamanager.entrecode.de/api/'id'
      * @param responseListener Response listener for the result.
      * @param errorListener    Error listener for occurred errors.
-     * @throws ECMalformedDataManagerIDException
+     * @throws ECMalformedDataManagerIDException Thrown when short id of Data Manager is malformed.
      */
     public static void create(String id, ECResponseListener<DataManager> responseListener, ECErrorListener errorListener) throws ECMalformedDataManagerIDException {
         DataManager dm = new DataManager(id, true);
@@ -162,7 +162,7 @@ public class DataManager {
     /**
      * Get the read only state of this DataManager object.
      *
-     * @return
+     * @return The read only state.
      */
     public boolean getReadOnly() {
         return mReadOnly;
@@ -198,7 +198,7 @@ public class DataManager {
     /**
      * Get the short id of the Data Manager this Data
      *
-     * @return
+     * @return The short id.
      */
     public String getID() {
         return mID;
@@ -235,13 +235,13 @@ public class DataManager {
      * Asynchronous request for the list of models of the connected DataManager.
      * <br><br>
      * Example:
-     * <pre><code>
+     * <pre>{@code
      *     dataManager.modelList().onResult(modelList ->{
      *         // do something
      *     }).onError(error -> {
      *         System.out.println(error.stringify();
      *     }).go();
-     * </code></pre>
+     * }</pre>
      *
      * @return ECModelListRequest
      */
@@ -253,13 +253,13 @@ public class DataManager {
      * Convenience method for asynchronously creating a public user entry. Shorthand for {@code DataManager.model("user").createEntry(new ECEntry())…}
      * <br><br>
      * Example:
-     * <pre><code>
+     * <pre>{@code
      *     dataManager.register().onResult(user -> {
      *         // do something
      *     }).onError(error -> {
      *         System.out.println(error.stringify();
      *     }).go();
-     * </code></pre>
+     * }</pre>
      *
      * @return ECEntryPostRequest
      */
@@ -271,13 +271,13 @@ public class DataManager {
      * Convenience method for asynchronously getting a public user entry. Shorthand for {@code DataManager.model("user").entry(id)…}
      * <br><br>
      * Example:
-     * <pre><code>
+     * <pre>{@code
      *     dataManager.user("00000001").onResponse(user -> {
      *         // do something
      *     }).onError(error -> {
      *         System.out.println(error.stringify();
      *     }).go();
-     * </code></pre>
+     * }</pre>
      *
      * @param id User or rather entry id of the user to request.
      * @return ECEntryRequest
@@ -290,13 +290,13 @@ public class DataManager {
      * Asset helper method for asynchronously getting a content-negotiated URL for a given asset.
      * <br><br>
      * Example:
-     * <pre><code>
+     * <pre>{@code
      *     dataManager.getFileURL("").onResponse( url -> {
      *         // do something
      *     }).onError(error -> {
      *         System.out.println(error.stringify();
      *     }).go();
-     * </code></pre>
+     * }</pre>
      *
      * @param id The id of the asset.
      * @return Url String for the requested file.
@@ -309,13 +309,13 @@ public class DataManager {
      * Asset helper method for asynchronously getting a content-negotiated URL for a given image asset. Supporting size filter with {@code …size(Integer)…}.
      * <br><br>
      * Example:
-     * <pre><code>
+     * <pre>{@code
      *     dataManager.getImageURL("").size(400).onResponse( url -> {
      *         // do something
      *     }).onError(error -> {
      *         System.out.println(error.stringify();
      *     }).go();
-     * </code></pre>
+     * }</pre>
      *
      * @param id The id of the asset.
      * @return Url String for the requested file.
@@ -328,13 +328,13 @@ public class DataManager {
      * Asset helper method for asynchronously getting a content-negotiated thumbnail URL for a given image asset. Supporting size filter with {@code …size(Integer)…}.
      * <br><br>
      * Example:
-     * <pre><code>
+     * <pre>{@code
      *     dataManager.getImageThumbURL("3e76550c-f4e3-402b-aca4-203dfc661b9f").size(50).onResponse( url -> {
      *         // do something
      *     }).onError(error -> {
      *         System.out.println(error.stringify();
      *     }).go();
-     * </code></pre>
+     * }</pre>
      *
      * @param id The id of the asset.
      * @return Url String for the requested file.
@@ -347,13 +347,13 @@ public class DataManager {
      * Requests a list of all available assets for the connected Data Manager.
      * <br><br>
      * Example:
-     * <pre><code>
+     * <pre>{@code
      *     dataManager.assets().onResponse(assetList -> {
      *         // do something
      *     }).onError(error -> {
      *         System.out.println(error.stringify());
      *     }).go();
-     * </code></pre>
+     * }</pre>
      *
      * @return ECAssetRequest
      */
@@ -365,13 +365,13 @@ public class DataManager {
      * Requests a single asset of the connected Data Manager.
      * <br><br>
      * Example:
-     * <pre><code>
+     * <pre>{@code
      *     dataManager.asset("3e76550c-f4e3-402b-aca4-203dfc661b9f").onResponse(asset -> {
      *         // do something
      *     }).onError(error -> {
      *         System.out.println(error.stringify());
      *     }).go();
-     * </code></pre>
+     * }</pre>
      *
      * @param id The id of the asset to request.
      * @return ECAssetRequest
@@ -384,7 +384,7 @@ public class DataManager {
      * Method for creating a new asset in the connected Data Manager.
      * <br><br>
      * Example:
-     * <pre><code>
+     * <pre>{@code
      *     File file = new File…
      *     …
      *     dataManager.createAsset(file).onResponse(asset -> {
@@ -392,7 +392,7 @@ public class DataManager {
      *     }).onError(error -> {
      *         System.out.println(error.stringify());
      *     }).go();
-     * </code></pre>
+     * }</pre>
      *
      * @param file The file from which the asset should be created.
      * @return ECAssetsPostRequest
@@ -409,7 +409,7 @@ public class DataManager {
      * Method for creating multiple new assets in the connected Data Manager.
      * <br><br>
      * Example:
-     * <pre><code>
+     * <pre>{@code
      *     File file = new File…
      *     File file2 = new File…
      *     …
@@ -421,7 +421,7 @@ public class DataManager {
      *     }).onError(error -> {
      *         System.out.println(error.stringify());
      *     }).go();
-     * </code></pre>
+     * }</pre>
      *
      * @param files The file from which the asset should be created.
      * @return ECAssetsPostRequest

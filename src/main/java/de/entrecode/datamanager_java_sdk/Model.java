@@ -29,13 +29,13 @@ public class Model {
      * Requests all entries for this model.
      * <br><br>
      * Example:
-     * <pre><code>
+     * <pre>{@code
      *     dataManager.model("to-do-item").entries().onResponse(entries -> {
      *         // do something
      *     }).onError(error -> {
      *         System.out.println(error.stringify());
      *     }).go();
-     * </code></pre>
+     * }</pre>
      *
      * @return ECEntriesRequest.
      */
@@ -47,13 +47,13 @@ public class Model {
      * Requests a single entry of this model.
      * <br><br>
      * Example:
-     * <pre><code>
+     * <pre>{@code
      *     dataManager.model("to-do-item").entry("00000001").onResponse(entry -> {
      *         // do something
      *     }).onError(error -> {
      *         System.out.println(error.stringify());
      *     }).go();
-     * </code></pre>
+     * }</pre>
      *
      * @param id The id of the entry to request.
      * @return ECEntryRequest.
@@ -66,7 +66,7 @@ public class Model {
      * Request for creating a new entry for this model.
      * <br><br>
      * Example:
-     * <pre><code>
+     * <pre>{@code
      *     ECEntry entry = new ECEntry();
      *     …
      *     dataManager.model("to-do-item").createEntry(entry).onResponse(createdEntry -> {
@@ -74,7 +74,7 @@ public class Model {
      *     }).onError(error -> {
      *         System.out.println(error.stringify());
      *     }).go();
-     * </code></pre>
+     * }</pre>
      *
      * @param entry The entry which will be created.
      * @return ECEntryPostRequest
@@ -89,6 +89,7 @@ public class Model {
 
     /**
      * Request the JSON Schema for this model.
+     *
      * @return ECSchemaRequest
      */
     public ECSchemaRequest getSchema() {
@@ -97,6 +98,7 @@ public class Model {
 
     /**
      * Get the associated DataManager
+     *
      * @return The associated DataManager
      */
     public DataManager getDataManager() {
@@ -105,6 +107,7 @@ public class Model {
 
     /**
      * Get the id of the desired model.
+     *
      * @return The id of the desired model.
      */
     public String getModelID() {
