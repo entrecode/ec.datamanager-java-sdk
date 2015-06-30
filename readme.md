@@ -1,6 +1,6 @@
 # ec.datamanager-java-sdk
 
-Java SDK for [ec.datamanager](https://entrecode.de/datamanager). By entrecode.
+Java SDK for [ec.datamanager](https://editor.entrecode.de). By entrecode.
 
 Simply use the generated APIs of the ec.datamanager with Java.
 
