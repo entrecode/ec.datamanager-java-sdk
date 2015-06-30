@@ -12,11 +12,16 @@ import de.entrecode.datamanager_java_sdk.requests.ECRequest;
 import java.io.Reader;
 
 /**
- * Created by simon, entrecode GmbH, Stuttgart (Germany) on 11.06.15.
+ * Request for all assets of a Data Manager.
  */
 public class ECAssetsRequest extends ECRequest<ECList<ECAsset>> {
     private final DataManager mDataManager;
 
+    /**
+     * Default constructor with the DataManager of whom the assets should be requested.
+     *
+     * @param dataManager The DataManager connected to the Data Manager with the assets of interest.
+     */
     public ECAssetsRequest(DataManager dataManager) {
         mDataManager = dataManager;
     }

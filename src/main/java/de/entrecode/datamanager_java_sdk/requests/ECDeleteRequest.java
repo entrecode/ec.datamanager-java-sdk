@@ -1,21 +1,25 @@
 package de.entrecode.datamanager_java_sdk.requests;
 
-import java.io.IOException;
 import java.io.Reader;
 
 /**
- * Created by simon, entrecode GmbH, Stuttgart (Germany) on 03.06.15.
+ * Abstract class for all delete requests made by ec.datamanager-java-sdk.
  */
 public abstract class ECDeleteRequest extends ECRequest<Boolean> {
     protected final String mAuthHeaderValue;
 
+    /**
+     * Default constructor with authorization header value.
+     *
+     * @param authHeaderValue The authorization header values to use with this request.
+     */
     public ECDeleteRequest(String authHeaderValue) {
         mAuthHeaderValue = authHeaderValue;
         mMethod = "DELETE";
     }
 
     @Override
-    public Boolean buildResponse(Reader response) throws IOException {
+    public Boolean buildResponse(Reader response) {
         return true;
     }
 }

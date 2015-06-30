@@ -10,11 +10,17 @@ import de.entrecode.datamanager_java_sdk.requests.ECPutRequest;
 import java.io.Reader;
 
 /**
- * Created by simon, entrecode GmbH, Stuttgart (Germany) on 08.06.15.
+ * Request for saving a modified entry.
  */
 public class ECEntrySaveRequest extends ECPutRequest<ECEntry> {
     private String mUrl;
 
+    /**
+     * Default constructor with authorization header and url of the modified entry.
+     *
+     * @param authHeaderValue The authorization header.
+     * @param url             The url of the modified entry.
+     */
     public ECEntrySaveRequest(String authHeaderValue, String url) {
         super(authHeaderValue);
         mUrl = url;

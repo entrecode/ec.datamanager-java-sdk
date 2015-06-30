@@ -1,7 +1,7 @@
 package de.entrecode.datamanager_java_sdk.exceptions;
 
 /**
- * Created by simon, entrecode GmbH, Stuttgart (Germany) on 16.06.15.
+ * This exception is thrown when a request is called on a read only DataManager which needs a valid access token.
  */
 public class ECDataMangerInReadOnlyModeException extends RuntimeException {
     public ECDataMangerInReadOnlyModeException() {

@@ -7,16 +7,21 @@ import de.entrecode.datamanager_java_sdk.model.ECAsset;
 import de.entrecode.datamanager_java_sdk.model.ECResourceParser;
 import de.entrecode.datamanager_java_sdk.requests.ECRequest;
 
-import java.io.IOException;
 import java.io.Reader;
 
 /**
- * Created by simon, entrecode GmbH, Stuttgart (Germany) on 17.06.15.
+ * Request for a single asset.
  */
 public class ECAssetRequest extends ECRequest<ECAsset> {
     private final DataManager mDataManager;
     private final String mID;
 
+    /**
+     * Default consstructor with associated DataManager and id of the requested asset.
+     *
+     * @param dataManager The DataManager connected to the Data Manager containing the asset.
+     * @param id          The id of the requested asset.
+     */
     public ECAssetRequest(DataManager dataManager, String id) {
         mDataManager = dataManager;
         mID = id;
@@ -34,7 +39,7 @@ public class ECAssetRequest extends ECRequest<ECAsset> {
     }
 
     @Override
-    public ECAsset buildResponse(Reader response) throws IOException {
+    public ECAsset buildResponse(Reader response) {
         ECAsset out = new ECResourceParser<ECAsset>(ECAsset.class).fromJson(response);
         if (!mDataManager.getReadOnly()) {
             out.setAuthHeader(mDataManager.getToken().toString());

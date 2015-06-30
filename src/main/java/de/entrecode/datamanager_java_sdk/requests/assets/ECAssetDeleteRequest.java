@@ -4,11 +4,17 @@ import com.squareup.okhttp.Request;
 import de.entrecode.datamanager_java_sdk.requests.ECDeleteRequest;
 
 /**
- * Created by simon, entrecode GmbH, Stuttgart (Germany) on 11.06.15.
+ * Request for deleting an asset.
  */
 public class ECAssetDeleteRequest extends ECDeleteRequest {
     private final String selfRef;
 
+    /**
+     * Default constructor with authorization header and self ref of the asset.
+     *
+     * @param authHeaderValue The authorization header.
+     * @param selfRef         The self ref.
+     */
     public ECAssetDeleteRequest(String authHeaderValue, String selfRef) {
         super(authHeaderValue);
         this.selfRef = selfRef;

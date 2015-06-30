@@ -7,11 +7,11 @@ import de.entrecode.datamanager_java_sdk.DataManager;
 import de.entrecode.datamanager_java_sdk.model.ECResourceParser;
 import de.entrecode.datamanager_java_sdk.requests.ECRequest;
 
-import java.io.IOException;
 import java.io.Reader;
 
 /**
- * Created by simon, entrecode GmbH, Stuttgart (Germany) on 11.06.15.
+ * Request for all three asset helper methods ({@link DataManager#getFileURL(String)}, {@link DataManager#getImageURL(String)},
+ * {@link DataManager#getImageThumbURL(String)}).
  */
 public class ECFileURLRequest extends ECRequest<String> {
     private final DataManager mDataManager;
@@ -22,26 +22,54 @@ public class ECFileURLRequest extends ECRequest<String> {
     private String mLocale;
     private int mSize = -1;
 
+    /**
+     * Default constructor for file url requests with the assigned DataManager and the id of the asset.
+     *
+     * @param dataManager The assigned DataManager connected to the Data Manager containing the asset.
+     * @param id          The id of the asset.
+     */
     public ECFileURLRequest(DataManager dataManager, String id) {
         mDataManager = dataManager;
         mAssetID = id;
     }
 
+    /**
+     * Enables image file helper requests.
+     *
+     * @return ECFileURLRequest
+     */
     public ECFileURLRequest image() {
         isImage = true;
         return this;
     }
 
+    /**
+     * Enables thumbnail file helper requests.
+     *
+     * @return ECFileURLRequest
+     */
     public ECFileURLRequest crop() {
         isThumbnail = true;
         return this;
     }
 
+    /**
+     * Set the locale to request.
+     *
+     * @param locale The locale to request.
+     * @return ECFileURLRequest
+     */
     public ECFileURLRequest locale(String locale) {
         mLocale = locale;
         return this;
     }
 
+    /**
+     * Set the image size.
+     *
+     * @param size The size to request.
+     * @return ECFileURLRequest
+     */
     public ECFileURLRequest size(int size) {
         mSize = size;
         return this;
@@ -84,7 +112,7 @@ public class ECFileURLRequest extends ECRequest<String> {
     }
 
     @Override
-    public String buildResponse(Reader response) throws IOException {
+    public String buildResponse(Reader response) {
         JsonObject url = new ECResourceParser<JsonObject>(JsonObject.class).fromJson(response);
         return url.get("url").getAsString();
     }
