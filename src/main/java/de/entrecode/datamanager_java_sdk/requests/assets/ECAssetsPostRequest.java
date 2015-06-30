@@ -13,25 +13,36 @@ import de.entrecode.datamanager_java_sdk.model.ECResourceParser;
 import de.entrecode.datamanager_java_sdk.requests.ECPostRequest;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.Reader;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by simon, entrecode GmbH, Stuttgart (Germany) on 17.06.15.
+ * Request for creation of asset(s).
  */
 public class ECAssetsPostRequest extends ECPostRequest<List<ECAsset>> {
     private final DataManager mDataManager;
     private List<File> mFiles;
 
+    /**
+     * Constructor for creating a multiple assets in the provided Data Manager.
+     *
+     * @param dataManager The DataManager connected to the Data Manager in which the assets should be created.
+     * @param files       The list of files with what the assets should be created.
+     */
     public ECAssetsPostRequest(DataManager dataManager, List<File> files) {
         super(dataManager.getToken().toString());
         mDataManager = dataManager;
         mFiles = files;
     }
 
+    /**
+     * Constructor for creating a single asset in the provided Data Manager.
+     *
+     * @param dataManager The DataManager connected to the Data Manager in which the asset should be created.
+     * @param file        The file with what the asset should be created.
+     */
     public ECAssetsPostRequest(DataManager dataManager, File file) {
         super(dataManager.getToken().toString());
         mDataManager = dataManager;
@@ -68,7 +79,7 @@ public class ECAssetsPostRequest extends ECPostRequest<List<ECAsset>> {
     }
 
     @Override
-    public List<ECAsset> buildResponse(Reader response) throws IOException {
+    public List<ECAsset> buildResponse(Reader response) {
         JsonObject res = new ECResourceParser<JsonObject>(JsonObject.class).fromJson(response);
         JsonElement assetsJson = res.get("_links").getAsJsonObject().get("ec:asset");
         JsonArray arr;
