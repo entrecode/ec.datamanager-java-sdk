@@ -8,25 +8,77 @@ import de.entrecode.datamanager_java_sdk.requests.entries.ECEntryRequest;
 import de.entrecode.datamanager_java_sdk.requests.models.ECSchemaRequest;
 
 /**
- * Created by Simon Scherzinger, entrecode GmbH, Stuttgart (Germany) on 03.06.15.
+ * Class providing access to all requests for an individual model of a Data Manager. Best created with {@code dataManager.model(modelId);}.
  */
 public class Model {
     private DataManager mDataManager;
     private String mModelID;
 
+    /**
+     * Creates an Model object for a DataManager with the given model id. Can then be used to access all requests for the model.
+     *
+     * @param dataManager The DataManager object connected to the Data Manager the desired model is part of.
+     * @param modelID     The id of the desired model.
+     */
     public Model(DataManager dataManager, String modelID) {
         mDataManager = dataManager;
         mModelID = modelID;
     }
 
+    /**
+     * Requests all entries for this model.
+     * <br><br>
+     * Example:
+     * <pre><code>
+     *     dataManager.model("to-do-item").entries().onResponse(entries -> {
+     *         // do something
+     *     }).onError(error -> {
+     *         System.out.println(error.stringify());
+     *     }).go();
+     * </code></pre>
+     *
+     * @return ECEntriesRequest.
+     */
     public ECEntriesRequest entries() {
         return new ECEntriesRequest(mDataManager, mModelID);
     }
 
+    /**
+     * Requests a single entry of this model.
+     * <br><br>
+     * Example:
+     * <pre><code>
+     *     dataManager.model("to-do-item").entry("00000001").onResponse(entry -> {
+     *         // do something
+     *     }).onError(error -> {
+     *         System.out.println(error.stringify());
+     *     }).go();
+     * </code></pre>
+     *
+     * @param id The id of the entry to request.
+     * @return ECEntryRequest.
+     */
     public ECEntryRequest entry(String id) {
         return new ECEntryRequest(mDataManager, mModelID, id);
     }
 
+    /**
+     * Request for creating a new entry for this model.
+     * <br><br>
+     * Example:
+     * <pre><code>
+     *     ECEntry entry = new ECEntry();
+     *     …
+     *     dataManager.model("to-do-item").createEntry(entry).onResponse(createdEntry -> {
+     *         // do something
+     *     }).onError(error -> {
+     *         System.out.println(error.stringify());
+     *     }).go();
+     * </code></pre>
+     *
+     * @param entry The entry which will be created.
+     * @return ECEntryPostRequest
+     */
     public ECEntryPostRequest createEntry(ECEntry entry) {
         if (mDataManager.getReadOnly() && !mModelID.equals("user")) {
             throw new ECDataMangerInReadOnlyModeException();
@@ -35,14 +87,26 @@ public class Model {
         return (ECEntryPostRequest) new ECEntryPostRequest(this).body(entry.toBody());
     }
 
+    /**
+     * Request the JSON Schema for this model.
+     * @return ECSchemaRequest
+     */
     public ECSchemaRequest getSchema() {
         return new ECSchemaRequest(mDataManager, mModelID);
     }
 
+    /**
+     * Get the associated DataManager
+     * @return The associated DataManager
+     */
     public DataManager getDataManager() {
         return mDataManager;
     }
 
+    /**
+     * Get the id of the desired model.
+     * @return The id of the desired model.
+     */
     public String getModelID() {
         return mModelID;
     }
