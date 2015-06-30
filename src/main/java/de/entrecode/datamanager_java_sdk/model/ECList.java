@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 /**
- * Created by simon, entrecode GmbH, Stuttgart (Germany) on 11.06.15.
+ * Class representing ECLists of Data Managers.
  */
 public class ECList<T> {
     private transient String mAuthHeaderValue;
@@ -18,23 +18,37 @@ public class ECList<T> {
     private ArrayList<T> _embedded;
     private JsonElement _links;
 
+    /**
+     * Get embedded resources.
+     *
+     * @return ArrayList of list items. Can be ECEntries or ECAssets.
+     */
     public ArrayList<T> getEmbedded() {
         return _embedded;
     }
 
-    public void setEmbedded(ArrayList<T> _embedded) {
-        this._embedded = _embedded;
-    }
-
+    /**
+     * Get authorization header associated with this list.
+     *
+     * @return The autorization header.
+     */
     public String getAuthHeaderValue() {
         return mAuthHeaderValue;
     }
 
+    /**
+     * Set autorization header for this list. Will inject the header to all embedded resources.
+     *
+     * @param authHeaderValue The authorization header.
+     */
     public void setAuthHeaderValue(String authHeaderValue) {
         this.mAuthHeaderValue = authHeaderValue;
         injectAuthHeaderToEmbedded();
     }
 
+    /**
+     * Method for injecting authorization header to embedded resources. Used by {@link #setAuthHeaderValue(String)}.
+     */
     private void injectAuthHeaderToEmbedded() {
         if (_embedded != null) {
             for (T elem : _embedded) {
@@ -47,18 +61,38 @@ public class ECList<T> {
         }
     }
 
+    /**
+     * Get total number of elements of the resources this list represents.
+     *
+     * @return The total number
+     */
     public int getTotal() {
         return total;
     }
 
+    /**
+     * Get the count of elements currently in this list.
+     *
+     * @return The count.
+     */
     public int getCount() {
         return count;
     }
 
+    /**
+     * Get links element holding HAL-links
+     *
+     * @return JsonElement with HAL-links
+     */
     public JsonElement getLinks() {
         return _links;
     }
 
+    /**
+     * GSON JsonDeserializer for ECLists
+     *
+     * @param <T> The type of the elements in the list.
+     */
     public static class ECListJsonDeserializer<T> implements JsonDeserializer<ECList<T>> {
         Type mTypedClass;
 

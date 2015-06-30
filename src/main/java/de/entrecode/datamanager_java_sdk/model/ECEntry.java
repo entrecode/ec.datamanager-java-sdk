@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by simon, entrecode GmbH, Stuttgart (Germany) on 03.06.15.
+ * Class representing entries of Data Managers.
  */
 public class ECEntry {
     protected transient String mAuthHeaderValue;
@@ -25,15 +25,29 @@ public class ECEntry {
 
     private JsonObject _links;
 
+    /**
+     * Default constructor.
+     */
     public ECEntry() {
         values = new HashMap<>();
         isPrivate = false;
     }
 
+    /**
+     * Set all values of the entry.
+     *
+     * @param values HashMap with all field values for this entry.
+     */
     private void setValues(HashMap<String, Object> values) {
         this.values = values;
     }
 
+    /**
+     * Universal getter for entry values. Can get all mandatory fields (id, created, modified, isPrivate|private) and all other field values of the entry.
+     *
+     * @param key Name of the desired field.
+     * @return The values for the desired field.
+     */
     public Object get(String key) {
         switch (key) {
             case "id":
@@ -43,12 +57,19 @@ public class ECEntry {
             case "modified":
                 return modified;
             case "isPrivate":
+            case "private":
                 return isPrivate;
             default:
                 return values.get(key);
         }
     }
 
+    /**
+     * Universal setter for entry values. Can set all mandatory fields (id, created, modified, isPrivate|private) and all other field values of the entry.
+     *
+     * @param key   Name of the desired field.
+     * @param value The values for the desired field.
+     */
     public void set(String key, Object value) {
         switch (key) {
             case "id":
@@ -61,6 +82,7 @@ public class ECEntry {
                 modified = (String) value;
                 break;
             case "isPrivate":
+            case "private":
                 isPrivate = (Boolean) value;
                 break;
             default:
@@ -69,6 +91,22 @@ public class ECEntry {
         }
     }
 
+    /**
+     * Delete request for this entry.
+     * <br><br>
+     * Example:
+     * <pre>{@code
+     *     ECEntry entry;
+     *     …
+     *     entry.delete().onResponse(ok -> {
+     *         // do something
+     *     }).onError(error -> {
+     *         System.out.println(error.stringify());
+     *     }).go();
+     * }</pre>
+     *
+     * @return ECEntryDeleteRequests
+     */
     public ECEntryDeleteRequest delete() {
         if (mAuthHeaderValue == null) {
             throw new ECDataMangerInReadOnlyModeException();
@@ -79,6 +117,22 @@ public class ECEntry {
                 _links.getAsJsonObject("self").get("href").getAsString());
     }
 
+    /**
+     * Save request for this entry.
+     * <br><br>
+     * Example:
+     * <pre>{@code
+     *     ECEntry entry;
+     *     …
+     *     entry.save().onResponse(entry -> {
+     *         // do something
+     *     }).onError(error -> {
+     *         System.out.println(error.stringify());
+     *     }).go();
+     * }</pre>
+     *
+     * @return ECEntrySaveRequest
+     */
     public ECEntrySaveRequest save() {
         if (mAuthHeaderValue == null) {
             throw new ECDataMangerInReadOnlyModeException();
@@ -90,19 +144,35 @@ public class ECEntry {
                         .get("href").getAsString()).body(this.toBody());
     }
 
+    /**
+     * Method for converting this entry into a {@link RequestBody}.
+     *
+     * @return Converted entry RequestBody
+     */
     public RequestBody toBody() {
         RequestBody b = RequestBody.create(MediaType.parse("application/json"), new ECResourceParser<ECEntry>(ECEntry.class).toJson(this));
         return b;
     }
 
+    /**
+     * Get links object holding HAL-links
+     * @return JsonObject with HAL-links
+     */
     public JsonObject getLinks() {
         return _links;
     }
 
+    /**
+     * Set links object holding HAL-links
+     * @param links JsonObject with HAL-links
+     */
     public void setLinks(JsonObject links) {
         this._links = links;
     }
 
+    /**
+     * GSON JsonDeserializer for ECEntries
+     */
     public static class ECEntryJsonDeserializer implements JsonDeserializer<ECEntry> {
         @Override
         public ECEntry deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
@@ -153,6 +223,9 @@ public class ECEntry {
         }
     }
 
+    /**
+     * GSON JsonSerializer for ECEntries
+     */
     public static class ECEntryJsonSerializer implements JsonSerializer<ECEntry> {
         @Override
         public JsonElement serialize(ECEntry src, Type typeOfSrc, JsonSerializationContext context) {
