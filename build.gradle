@@ -3,6 +3,10 @@ version '0.2.0-SNAPSHOT'
 
 apply plugin: 'java'
 apply plugin: 'jacoco'
+apply plugin: 'maven'
+//apply plugin: 'signing'
+
+//archivesBaseName = "ec-datamanager_java_sdk"
 
 repositories {
     mavenCentral()
@@ -19,6 +23,26 @@ dependencies {
 }
 
 //noinspection GroovyAssignabilityCheck
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives javadocJar, sourcesJar
+}
+
+/*
+signing {
+    sign configurations.archives
+}
+*/
+
 test {
     // we always want the tests to be executed
     outputs.upToDateWhen { false }
@@ -27,4 +51,50 @@ test {
         events 'started', 'passed'
     }
     */
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            //beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            repository(url: "file://localhost/Users/simon/Documents/entrecodeGmbH/MavenRepo/")
+
+            /*
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+            */
+
+            pom.project {
+                name 'Java SDK for ec.datamanager'
+                packaging 'jar'
+                // optionally artifactId can be defined here
+                description 'The official Java SKD for Datamanager by entrecode. By entrecode.'
+                url 'https://entrecode.de'
+                
+                scm {
+                    connection 'scm:git:https://github.com/entrecode/ec.datamanager-java-sdk.git'
+                    developerConnection 'scm:git:https://github.com/entrecode/ec.datamanager-java-sdk.git'
+                    url 'https://github.com/entrecode/ec.datamanager-java-sdk.git'
+                }
+                licenses {
+                    license {
+                        name 'The Apache License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id 'scherzinger'
+                        name 'Simon Scherzinger'
+                        email 'scherzinger@entrecode.de'
+                    }
+                }
+            }
+        }
+    }
 }
