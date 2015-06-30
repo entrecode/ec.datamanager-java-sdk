@@ -12,11 +12,16 @@ import de.entrecode.datamanager_java_sdk.requests.ECPostRequest;
 import java.io.Reader;
 
 /**
- * Created by simon, entrecode GmbH, Stuttgart (Germany) on 08.06.15.
+ * Request for creating a entry.
  */
 public class ECEntryPostRequest extends ECPostRequest<ECEntry> {
     private final Model mModel;
 
+    /**
+     * Default constructor with model in which the entry should be created.
+     *
+     * @param model The model in which the entry should be created.
+     */
     public ECEntryPostRequest(Model model) {
         super(model.getDataManager().getToken() != null ? model.getDataManager().getToken().toString() : null);
         mModel = model;

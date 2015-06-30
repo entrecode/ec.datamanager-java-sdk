@@ -12,13 +12,20 @@ import de.entrecode.datamanager_java_sdk.requests.ECRequest;
 import java.io.Reader;
 
 /**
- * Created by simon, entrecode GmbH, Stuttgart (Germany) on 03.06.15.
+ * Request for a single entry.
  */
 public class ECEntryRequest extends ECRequest<ECEntry> {
     protected final DataManager mDataManager;
     protected final String mModelID;
     protected final String mEntryID;
 
+    /**
+     * Default constructor with DataManager, model id, and entry id of the entry which should be requested.
+     *
+     * @param dataManager The DataManager.
+     * @param modelID     The model id.
+     * @param entryID     The entry id.
+     */
     public ECEntryRequest(DataManager dataManager, String modelID, String entryID) {
         mDataManager = dataManager;
         mModelID = modelID;
