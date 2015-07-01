@@ -14,14 +14,14 @@ Get via Maven:
 <dependency>
   <groupId>de.entrecode</groupId>
   <artifactId>datamanager_java_sdk</artifactId>
-  <version>0.2.2</version>
+  <version>0.2.3</version>
 </dependency>
 ```
 
 or with Gradle:
 
 ```java
-compile 'de.entrecode:datamanager_java_sdk:0.2.2'
+compile 'de.entrecode:datamanager_java_sdk:0.2.3'
 ```
 
 ## Usage
@@ -400,6 +400,9 @@ Running tests with coverage:
 ```
 
 # Changelog
+
+### 0.2.3
+- SDK will use new thumbnail api for image assets
 
 ### 0.2.2
 - added JavaDoc
