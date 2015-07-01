@@ -51,18 +51,17 @@ public class DataManagerTest {
                         case "/asset/beeffeed?size=10&page=1":
                             return new MockResponse().setResponseCode(200).setBody("{\"count\":0,\"total\":0,\"_links\":{\"curies\":{\"href\":\"https://angus.entrecode.de/doc/rel/{rel}\",\"templated\":true},\"ec:api/asset/by-id\":{\"href\":\"https://datamanager.angus.entrecode.de/asset/beef1234{?assetID}\",\"templated\":true},\"ec:api\":{\"href\":\"https://datamanager.angus.entrecode.de/api/beef1234\"},\"ec:assets/options\":{\"href\":\"https://datamanager.angus.entrecode.de/asset/beef1234{?assetID,created,createdFrom,createdTo,created~,creator,dataManagerID,page,size,sort,tag,title,title~,type,type~}\",\"templated\":true},\"self\":{\"href\":\"https://datamanager.angus.entrecode.de/asset/beef1234\"}}}");
                         case "/4e430eb2-aaaa-4f76-9f68-b4b4bacdc7dd/url":
-                        case "/4e430eb2-aaaa-4f76-9f68-b4b4bacdc7dd/url?nocrop=true":
-                        case "/4e430eb2-aaaa-4f76-9f68-b4b4bacdc7dd/url?nocrop=false&size=200":
+                        case "/4e430eb2-aaaa-4f76-9f68-b4b4bacdc7dd/url?thumb=true&size=200":
                             return new MockResponse().setResponseCode(404);
-                        case "/4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd/url?nocrop=false&size=50":
-                        case "/4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd/url?nocrop=false&size=100":
-                        case "/4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd/url?nocrop=false&size=200":
-                        case "/4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd/url?nocrop=false&size=400":
+                        case "/4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd/url?thumb=true&size=50":
+                        case "/4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd/url?thumb=true&size=100":
+                        case "/4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd/url?thumb=true&size=200":
+                        case "/4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd/url?thumb=true&size=400":
                             return new MockResponse().setResponseCode(200).setBody("{\"url\":\"https://ec-datamanager-default-bucket.s3.amazonaws.com//home/www/datamanagerfiles/c024f209/rcf4bgN0mQWl35PuQ8w08SVh_200.jpg\"}");
-                        case "/4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd/url?nocrop=true&size=200":
+                        case "/4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd/url?size=200":
                             return new MockResponse().setResponseCode(200).setBody("{\"url\":\"https://ec-datamanager-default-bucket.s3.amazonaws.com//home/www/datamanagerfiles/c024f209/rcf4bgN0mQWl35PuQ8w08SVh_256.jpg\"}");
                         case "/4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd/url":
-                        case "/4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd/url?nocrop=true":
+                        case "/4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd/url?thumb=false":
                             return new MockResponse().setResponseCode(200).setBody("{\"url\":\"https://ec-datamanager-default-bucket.s3.amazonaws.com//home/www/datamanagerfiles/c024f209/rcf4bgN0mQWl35PuQ8w08SVh.jpg\"}");
                         case "/api/beef1234/to-do-item-single?size=10&page=1":
                             return new MockResponse().setResponseCode(200).setBody("{\"count\":1,\"total\":1,\"_links\":{\"collection\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234\"},\"curies\":{\"name\":\"beef1234\",\"href\":\"https://datamanager.entrecode.de/api/doc/beef1234/{rel}\",\"templated\":true},\"self\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/to-do-item-single\"},\"beef1234:to-do-item-single/options\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/to-do-item{?created,createdFrom,createdTo,done,id,modified,modifiedFrom,modifiedTo,page,private,size,sort,todo-text,todo-text~}\",\"templated\":true}},\"_embedded\":{\"beef1234:to-do-item-single\":{\"id\":\"VJY4n7vcI\",\"created\":\"2015-06-17T13:22:27.404Z\",\"modified\":\"2015-06-17T13:22:27.404Z\",\"private\":false,\"done\":false,\"todo-text\":\"Test text\",\"_links\":{\"collection\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/to-do-item-single\"},\"self\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/to-do-item-single?id=VJY4n7vcI\"},\"beef1234:to-do-item/creator\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/user?id=QkHCflm2\"}}}}}");

@@ -87,7 +87,9 @@ public class ECFileURLRequest extends ECRequest<String> {
 
         // add nocrop query param for thumbnails
         if (isImage) {
-            urlBuilder.addQueryParameter("nocrop", String.valueOf(!isThumbnail));
+            if (isThumbnail) {
+                urlBuilder.addQueryParameter("thumb", String.valueOf(isThumbnail));
+            }
             if (mSize >= 0) {
                 if (isThumbnail) {
                     if (mSize <= 50) {
