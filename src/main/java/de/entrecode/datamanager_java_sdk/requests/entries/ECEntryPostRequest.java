@@ -1,11 +1,9 @@
 package de.entrecode.datamanager_java_sdk.requests.entries;
 
-import com.google.gson.reflect.TypeToken;
 import com.squareup.okhttp.HttpUrl;
 import com.squareup.okhttp.Request;
 import de.entrecode.datamanager_java_sdk.Model;
 import de.entrecode.datamanager_java_sdk.model.ECEntry;
-import de.entrecode.datamanager_java_sdk.model.ECList;
 import de.entrecode.datamanager_java_sdk.model.ECResourceParser;
 import de.entrecode.datamanager_java_sdk.requests.ECPostRequest;
 
@@ -40,14 +38,12 @@ public class ECEntryPostRequest extends ECPostRequest<ECEntry> {
 
     @Override
     public ECEntry buildResponse(Reader response) {
-        Class clazz = new TypeToken<ECList<ECEntry>>() {
-        }.getRawType();
-        ECList<ECEntry> res = new ECResourceParser<ECList<ECEntry>>(clazz).fromJson(response);
+        ECEntry res = new ECResourceParser<ECEntry>(ECEntry.class).fromJson(response);
         if (mModel.getDataManager().getToken() != null) {
             res.setAuthHeaderValue(mModel.getDataManager().getToken().toString());
         } else if (mModel.getModelID().equals("user")) {
-            res.setAuthHeaderValue(String.valueOf(res.getEmbedded().get(0).get("temporaryToken")));
+            res.setAuthHeaderValue(String.valueOf(res.get("temporaryToken")));
         }
-        return res.getEmbedded().get(0);
+        return res;
     }
 }

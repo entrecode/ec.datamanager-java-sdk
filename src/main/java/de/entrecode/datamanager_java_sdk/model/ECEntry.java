@@ -92,6 +92,14 @@ public class ECEntry {
     }
 
     /**
+     * Setter vor authHeaderValue
+     * @param authHeaderValue
+     */
+    public void setAuthHeaderValue(String authHeaderValue) {
+        this.mAuthHeaderValue = authHeaderValue;
+    }
+
+    /**
      * Delete request for this entry.
      * <br><br>
      * Example:

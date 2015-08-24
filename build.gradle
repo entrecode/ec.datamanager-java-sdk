@@ -1,5 +1,5 @@
 group 'de.entrecode'
-version '0.2.3'
+version '0.4.0'
 
 apply plugin: 'java'
 apply plugin: 'jacoco'

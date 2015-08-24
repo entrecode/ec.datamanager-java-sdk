@@ -401,6 +401,9 @@ Running tests with coverage:
 
 # Changelog
 
+### 0.4.0
+- use updated single resource responses in Public API.
+
 ### 0.2.3
 - SDK will use new thumbnail api for image assets
 
