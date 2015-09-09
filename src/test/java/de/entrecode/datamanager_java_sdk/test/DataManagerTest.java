@@ -73,10 +73,10 @@ public class DataManagerTest {
                             return new MockResponse().setResponseCode(200).setBody("{\"id\":\"VJY4n7vcI\",\"created\":\"2015-06-17T13:22:27.404Z\",\"modified\":\"2015-06-17T13:22:27.404Z\",\"private\":false,\"done\":false,\"todo-text\":\"Test text\",\"_links\":{\"collection\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/to-do-item\"},\"self\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/to-do-item?id=VJY4n7vcI\"},\"beef1234:to-do-item/creator\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/user?id=QkHCflm2\"}}}");
                         // DM with 2 models
                         case "/api/beef1234/":
-                            return new MockResponse().setResponseCode(200).setBody("{\"dataManagerID\":\"a50ae357-91b5-4d56-ba0e-7ec476f6c07d\",\"_links\":{\"curies\":{\"name\":\"beef1234\",\"href\":\"https://datamanager.entrecode.de/api/doc/beef1234/relation/{rel}\",\"templated\":true},\"beef1234:to-do-item\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/to-do-item\",\"name\":\"to-do-item list\"},\"beef1234:user\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/user\",\"name\":\"user list\"},\"ec:api/assets\":{\"href\":\"https://datamanager.entrecode.de/asset/beef1234\"}}}");
+                            return new MockResponse().setResponseCode(200).setBody("{\"_links\":{\"curies\":{\"name\":\"beef1234\",\"href\":\"https://datamanager.entrecode.de/api/doc/f84710b8/relation/{rel}\",\"templated\":true}},\"_embedded\":{\"beef1234:to-do-item\":{\"hexColor\":\"#abcdef\",\"titleField\":\"to-do-text\",\"_links\":{\"self\":{\"href\":\"https://datamanager.entrecode.de/api/f84710b8/to-do-item\"}}},\"beef1234:user\":{\"hexColor\":\"#abcdef\",\"titleField\":\"id\",\"_links\":{\"self\":{\"href\":\"https://datamanager.entrecode.de/api/f84710b8/user\"}}}}}");
                         // DM with user model
                         case "/api/beefbeef/":
-                            return new MockResponse().setResponseCode(200).setBody("{\"dataManagerID\":\"a50ae357-91b5-4d56-ba0e-7ec476f6c07d\",\"_links\":{\"curies\":{\"name\":\"beefbeef\",\"href\":\"https://datamanager.entrecode.de/api/doc/beefbeef/relation/{rel}\",\"templated\":true},\"beefbeef:user\":{\"href\":\"https://datamanager.entrecode.de/api/beefbeef/user\",\"name\":\"user list\"},\"ec:api/assets\":{\"href\":\"https://datamanager.entrecode.de/asset/beefbeef\"}}}");
+                            return new MockResponse().setResponseCode(200).setBody("{\"_links\":{\"curies\":{\"name\":\"beef1234\",\"href\":\"https://datamanager.entrecode.de/api/doc/f84710b8/relation/{rel}\",\"templated\":true}},\"_embedded\":{\"beef1234:user\":{\"hexColor\":\"#abcdef\",\"titleField\":\"id\",\"_links\":{\"self\":{\"href\":\"https://datamanager.entrecode.de/api/f84710b8/user\"}}}}}");
                         case "/api/schema/beef1234/to-do-item?template=get":
                         case "/api/schema/beef1234/to-do-item?template=put":
                         case "/api/schema/beef1234/to-do-item?template=post":
@@ -271,6 +271,9 @@ public class DataManagerTest {
         await().until(() -> models[0] != null);
         assertTrue(models[0].get(0) instanceof Model);
         assertEquals(1, models[0].size());
+        Model m = (Model) models[0].get(0);
+        assertEquals("#abcdef", m.getHexColor());
+        assertEquals("id", m.getTitleField());
     }
 
     @Test

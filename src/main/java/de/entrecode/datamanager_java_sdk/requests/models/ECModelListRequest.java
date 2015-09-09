@@ -38,12 +38,13 @@ public class ECModelListRequest extends ECRequest<List<Model>> {
         List<Model> models = new ArrayList<>();
         Gson gson = new GsonBuilder().create();
         JsonObject res = gson.fromJson(response, JsonObject.class);
-        JsonObject _links = res.getAsJsonObject("_links");
+        JsonObject _embedded = res.getAsJsonObject("_embedded");
 
-        for (Map.Entry link : _links.entrySet()) {
-            if (!link.getKey().equals("curies") && !link.getKey().equals("ec:api/assets")) {
-                models.add(new Model(mDataManager, link.getKey().toString().substring(link.getKey().toString().lastIndexOf(":") + 1)));
-            }
+        for (Map.Entry embedded : _embedded.entrySet()) {
+            String titleField = ((JsonObject) embedded.getValue()).get("titleField").getAsString();
+            String hexColor = ((JsonObject) embedded.getValue()).get("hexColor").getAsString();
+            String modelName = embedded.getKey().toString().substring(embedded.getKey().toString().lastIndexOf(":") + 1);
+            models.add(new Model(mDataManager, modelName, titleField, hexColor));
         }
 
         return models;

@@ -14,6 +14,9 @@ public class Model {
     private DataManager mDataManager;
     private String mModelID;
 
+    private String titleField;
+    private String hexColor;
+
     /**
      * Creates an Model object for a DataManager with the given model id. Can then be used to access all requests for the model.
      *
@@ -23,6 +26,23 @@ public class Model {
     public Model(DataManager dataManager, String modelID) {
         mDataManager = dataManager;
         mModelID = modelID;
+        titleField = "id";
+        hexColor = "#ffffff";
+    }
+
+    /**
+     * Creates an Model object for a DataManager with the given model id. Can then be used to access all requests for the model.
+     *
+     * @param dataManager The DataManager object connected to the Data Manager the desired model is part of.
+     * @param modelID     The id of the desired model.
+     * @param title       The titleField of the model.
+     * @param color       The hexColor of the mode.
+     */
+    public Model(DataManager dataManager, String modelID, String title, String color) {
+        mDataManager = dataManager;
+        mModelID = modelID;
+        titleField = title;
+        hexColor = color;
     }
 
     /**
@@ -112,5 +132,23 @@ public class Model {
      */
     public String getModelID() {
         return mModelID;
+    }
+
+    /**
+     * Get the titleField of the desired model.
+     *
+     * @return The titleField of the desired model.
+     */
+    public String getTitleField() {
+        return titleField;
+    }
+
+    /**
+     * Get the hexColor of the desired model.
+     *
+     * @return The hexColor of the desired model.
+     */
+    public String getHexColor() {
+        return hexColor;
     }
 }
