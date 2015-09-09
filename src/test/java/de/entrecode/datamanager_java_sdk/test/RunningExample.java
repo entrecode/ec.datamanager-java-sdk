@@ -95,7 +95,7 @@ public class RunningExample {
                 })
                 .onError(errorListener).go();
 
-        dataManagerRW.model("to-do-item").entry("4kmswCbFI")
+        dataManagerRW.model("to-do-item").entry("VyMJWmK4d")
                 .onResponse(entry -> {
                     entry.set("done", true);
                     entry.save()
@@ -129,8 +129,8 @@ public class RunningExample {
 
 
         DataManager dataManagerAssets = new DataManager(
-                new URL("https://datamanager.angus.entrecode.de/api/c024f209/"),
-                UUID.fromString("4c0fd785-bd08-4124-95b9-048467a9c0f6"));
+                new URL("https://datamanager.entrecode.de/api/f84710b8/"),
+                UUID.fromString("2c6c999b-06bb-4258-be84-5674d66618ab"));
 
         ClassLoader cl = RunningExample.class.getClassLoader();
         File file = new File(cl.getResource("test.jpg").getFile());
@@ -163,7 +163,7 @@ public class RunningExample {
                     System.out.println(assets);
                 }).onError(errorListener).go();
 
-        dataManagerAssets.asset("4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd")
+        dataManagerAssets.asset("b05e55b0-a8e7-4ed6-8cba-e6162acd53e5")
                 .onResponse(asset -> {
                     System.out.println(asset);
                 })
