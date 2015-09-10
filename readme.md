@@ -381,6 +381,65 @@ asset.delete()
 	}).go();
 ```
 
+### Get Tags
+
+```java
+dm.tags()
+	.onResponse(new ECResponseListener<List<ECTag>>{
+		@Override
+		public void onResponse(List<ECTag> tags){
+			// TODO something
+		}
+	}).go();
+```
+
+### Get Tag
+```java
+dm.tag("tagname")… // is shorthand for
+dm.tag().filter(new HashMap<String, String>(){{
+		put("tag", "tagname");
+	}})
+	.onResponse(new ECResponseListener<ECTag>{
+		@Override
+		public void onResponse(ECTag tag){
+			// TODO something
+		}
+	}).go();
+```
+
+
+### Edit Tag
+```java
+ECTag tag = …
+…
+tag.save()
+	.onResponse(new ECResponseListener<ECTag>{
+		@Override
+		public void onResponse(ECTag tag){
+			// TODO something
+		}
+	}).go();
+```
+
+### Delete Tag
+```java
+ECTag tag;
+…
+tag.delete()
+	.onResponse(new ECResponseListener{
+		@Override
+		public void onResponse(){
+			// TODO something
+		}
+	}
+	.onError(new ECErrorListener{
+		@Override
+		public void onError(ECError error){
+			// TODO something
+		}
+	}).go();
+```
+
 # Documentation
 
 see JavaDoc.
@@ -401,8 +460,12 @@ Running tests with coverage:
 
 # Changelog
 
+### 0.4.1
+- added tag api doc
+
 ### 0.4.0
 - use updated single resource responses in Public API.
+- added tag api.
 
 ### 0.2.3
 - SDK will use new thumbnail api for image assets
