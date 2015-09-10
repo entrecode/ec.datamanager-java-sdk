@@ -10,23 +10,15 @@ import java.io.Reader;
 /**
  * Request for saving a modified entry.
  */
-public class ECEntrySaveRequest extends ECPutRequest<ECEntry> {
-    private String mUrl;
-
+public class ECEntryPutRequest extends ECPutRequest<ECEntry> {
     /**
-     * Default constructor with authorization header and url of the modified entry.
+     * Default constructor with authorization header value and selfRef.
      *
-     * @param authHeaderValue The authorization header.
-     * @param url             The url of the modified entry.
+     * @param authHeaderValue The authorization header values to use with this request.
+     * @param selfRef The selfRef for this request
      */
-    public ECEntrySaveRequest(String authHeaderValue, String url) {
-        super(authHeaderValue);
-        mUrl = url;
-    }
-
-    @Override
-    public Request build() {
-        return new Request.Builder().url(mUrl).put(mBody).addHeader("Authorization", "Bearer " + mAuthHeaderValue).build();
+    public ECEntryPutRequest(String authHeaderValue, String selfRef) {
+        super(authHeaderValue, selfRef);
     }
 
     @Override

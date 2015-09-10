@@ -1,5 +1,6 @@
 package de.entrecode.datamanager_java_sdk.requests;
 
+import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 
 /**
@@ -7,16 +8,24 @@ import com.squareup.okhttp.RequestBody;
  */
 public abstract class ECPutRequest<T> extends ECRequest<T> {
     protected final String mAuthHeaderValue;
+    protected final String mUrl;
     protected RequestBody mBody;
 
     /**
-     * Default constructor with authorization header value.
+     * Default constructor with authorization header value and selfRef.
      *
      * @param authHeaderValue The authorization header values to use with this request.
+     * @param selfRef The selfRef for this request
      */
-    public ECPutRequest(String authHeaderValue) {
+    public ECPutRequest(String authHeaderValue, String selfRef) {
         mAuthHeaderValue = authHeaderValue;
+        mUrl = selfRef;
         mMethod = "PUT";
+    }
+
+    @Override
+    public Request build() {
+        return new Request.Builder().url(mUrl).put(mBody).addHeader("Authorization", "Bearer " + mAuthHeaderValue).build();
     }
 
     /**

@@ -1,6 +1,5 @@
 package de.entrecode.datamanager_java_sdk.test;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.squareup.okhttp.mockwebserver.Dispatcher;
 import com.squareup.okhttp.mockwebserver.MockResponse;
@@ -10,10 +9,7 @@ import de.entrecode.datamanager_java_sdk.DataManager;
 import de.entrecode.datamanager_java_sdk.Model;
 import de.entrecode.datamanager_java_sdk.exceptions.ECDataMangerInReadOnlyModeException;
 import de.entrecode.datamanager_java_sdk.exceptions.ECMalformedDataManagerIDException;
-import de.entrecode.datamanager_java_sdk.model.ECAsset;
-import de.entrecode.datamanager_java_sdk.model.ECEntry;
-import de.entrecode.datamanager_java_sdk.model.ECError;
-import de.entrecode.datamanager_java_sdk.model.ECList;
+import de.entrecode.datamanager_java_sdk.model.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,6 +38,14 @@ public class DataManagerTest {
             switch (request.getMethod()) {
                 case "GET":
                     switch (request.getPath()) {
+                        case "/tag/beef1234?tag=achja":
+                            return new MockResponse().setResponseCode(200).setBody("{\"count\":1,\"tag\":\"achja\",\"_links\":{\"collection\":{\"href\":\"https://datamanager.entrecode.de/tag?dataManagerID=a50ae357-91b5-4d56-ba0e-7ec476f6c07d\"},\"ec:assets/with-tag\":{\"href\":\"https://datamanager.entrecode.de/asset?dataManagerID=a50ae357-91b5-4d56-ba0e-7ec476f6c07d&tag=achja\"},\"ec:datamanager\":{\"href\":\"https://datamanager.entrecode.de/?dataManagerID=a50ae357-91b5-4d56-ba0e-7ec476f6c07d\"},\"self\":{\"href\":\"https://datamanager.entrecode.de/tag?dataManagerID=a50ae357-91b5-4d56-ba0e-7ec476f6c07d&tag=achja\"},\"curies\":{\"href\":\"https://doc.entrecode.de/data_manager/#relation-{rel}\",\"templated\":true}}}");
+                        case "/tag/beeffeed?size=10&page=1":
+                            return new MockResponse().setResponseCode(200).setBody("{\"count\":0,\"total\":0,\"_links\":{\"curies\":{\"href\":\"https://doc.entrecode.de/data_manager/#relation-{rel}\",\"templated\":true},\"ec:assets\":{\"href\":\"https://datamanager.entrecode.de/asset?dataManagerID=a50ae357-91b5-4d56-ba0e-7ec476f6c07d\"},\"ec:datamanager\":{\"href\":\"https://datamanager.entrecode.de/?dataManagerID=a50ae357-91b5-4d56-ba0e-7ec476f6c07d\"},\"ec:tags/options\":{\"href\":\"https://datamanager.entrecode.de/tag/f84710b8{?dataManagerID,page,size,sort,tag,tag~}\",\"templated\":true},\"self\":{\"href\":\"https://datamanager.entrecode.de/tag/f84710b8\"}}}");
+                        case "/tag/beefbeef?size=10&page=1":
+                            return new MockResponse().setResponseCode(200).setBody("{\"count\":1,\"total\":1,\"_links\":{\"curies\":{\"href\":\"https://doc.entrecode.de/data_manager/#relation-{rel}\",\"templated\":true},\"ec:assets\":{\"href\":\"https://datamanager.entrecode.de/asset?dataManagerID=a50ae357-91b5-4d56-ba0e-7ec476f6c07d\"},\"ec:datamanager\":{\"href\":\"https://datamanager.entrecode.de/?dataManagerID=a50ae357-91b5-4d56-ba0e-7ec476f6c07d\"},\"ec:tags/options\":{\"href\":\"https://datamanager.entrecode.de/tag/f84710b8{?dataManagerID,page,size,sort,tag,tag~}\",\"templated\":true},\"self\":{\"href\":\"https://datamanager.entrecode.de/tag/f84710b8\"}},\"_embedded\":{\"ec:tag\":{\"count\":1,\"tag\":\"achja\",\"_links\":{\"collection\":{\"href\":\"https://datamanager.entrecode.de/tag?dataManagerID=a50ae357-91b5-4d56-ba0e-7ec476f6c07d\"},\"ec:assets/with-tag\":{\"href\":\"https://datamanager.entrecode.de/asset?dataManagerID=a50ae357-91b5-4d56-ba0e-7ec476f6c07d&tag=achja\"},\"ec:datamanager\":{\"href\":\"https://datamanager.entrecode.de/?dataManagerID=a50ae357-91b5-4d56-ba0e-7ec476f6c07d\"},\"self\":{\"href\":\"https://datamanager.entrecode.de/tag?dataManagerID=a50ae357-91b5-4d56-ba0e-7ec476f6c07d&tag=achja\"}}}}}");
+                        case "/tag/beef1234?size=10&page=1":
+                            return new MockResponse().setResponseCode(200).setBody("{\"count\":2,\"total\":2,\"_links\":{\"curies\":{\"href\":\"https://doc.entrecode.de/data_manager/#relation-{rel}\",\"templated\":true},\"ec:assets\":{\"href\":\"https://datamanager.entrecode.de/asset?dataManagerID=a50ae357-91b5-4d56-ba0e-7ec476f6c07d\"},\"ec:datamanager\":{\"href\":\"https://datamanager.entrecode.de/?dataManagerID=a50ae357-91b5-4d56-ba0e-7ec476f6c07d\"},\"ec:tags/options\":{\"href\":\"https://datamanager.entrecode.de/tag/f84710b8{?dataManagerID,page,size,sort,tag,tag~}\",\"templated\":true},\"self\":{\"href\":\"https://datamanager.entrecode.de/tag/f84710b8\"}},\"_embedded\":{\"ec:tag\":[{\"count\":1,\"tag\":\"achja\",\"_links\":{\"collection\":{\"href\":\"https://datamanager.entrecode.de/tag?dataManagerID=a50ae357-91b5-4d56-ba0e-7ec476f6c07d\"},\"ec:assets/with-tag\":{\"href\":\"https://datamanager.entrecode.de/asset?dataManagerID=a50ae357-91b5-4d56-ba0e-7ec476f6c07d&tag=achja\"},\"ec:datamanager\":{\"href\":\"https://datamanager.entrecode.de/?dataManagerID=a50ae357-91b5-4d56-ba0e-7ec476f6c07d\"},\"self\":{\"href\":\"https://datamanager.entrecode.de/tag?dataManagerID=a50ae357-91b5-4d56-ba0e-7ec476f6c07d&tag=achja\"}}},{\"count\":1,\"tag\":\"ohja\",\"_links\":{\"collection\":{\"href\":\"https://datamanager.entrecode.de/tag?dataManagerID=a50ae357-91b5-4d56-ba0e-7ec476f6c07d\"},\"ec:assets/with-tag\":{\"href\":\"https://datamanager.entrecode.de/asset?dataManagerID=a50ae357-91b5-4d56-ba0e-7ec476f6c07d&tag=ohja\"},\"ec:datamanager\":{\"href\":\"https://datamanager.entrecode.de/?dataManagerID=a50ae357-91b5-4d56-ba0e-7ec476f6c07d\"},\"self\":{\"href\":\"https://datamanager.entrecode.de/tag?dataManagerID=a50ae357-91b5-4d56-ba0e-7ec476f6c07d&tag=ohja\"}}}]}}");
                         case "/api/beef1234/user?id=QkHCflm2":
                             return new MockResponse().setResponseCode(200).setBody("{\"id\":\"QkHCflm2\",\"created\":\"2015-04-17T07:46:24.908Z\",\"modified\":\"2015-04-17T07:46:24.908Z\",\"private\":true,\"temporaryToken\":\"e63dca99-6a56-43a5-8864-1a63ee8565e7\",\"_links\":{\"collection\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/user\"},\"self\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/user?id=QkHCflm2\"},\"f84710b8:user/creator\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/user?id=QkHCflm2\"}}}");
                         case "/asset/beef1234?assetID=4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd":
@@ -97,6 +101,8 @@ public class DataManagerTest {
                             return new MockResponse().setResponseCode(404).setBody("{\"status\":404,\"code\":2100,\"title\":\"Resource not found\",\"type\":\"https://entrecode.de/doc/error/2100\",\"_links\":{\"up\":{\"title\":\"Data Manager Home Page\",\"href\":\"https://datamanager.entrecode.de\"},\"describedby\":{\"title\":\"Error Description\",\"href\":\"https://entrecode.de/doc/error/2100\"}},\"detail\":\"some detail\",\"verbose\":\"some verbose info\"}");
                         case "/api/beef1234/to-do-item?id=AAAAAAAA":
                         case "/asset/beef1234?assetID=555ebdc3-fb84-42ba-b381-3345fb6f6132":
+                        case "/tag/beef1234?tag=nonexistant":
+                            // tag does not exist
                             return new MockResponse().setResponseCode(404).setBody("{\"status\":404,\"code\":2102,\"title\":\"No resource entity matching query string filter found\",\"type\":\"https://entrecode.de/doc/error/2102\",\"_links\":{\"up\":{\"title\":\"Data Manager Home Page\",\"href\":\"https://datamanager.entrecode.de\"},\"describedby\":{\"title\":\"Error Description\",\"href\":\"https://entrecode.de/doc/error/2102\"}},\"detail\":\"\",\"verbose\":\"\"}");
                         default:
                             throw new RuntimeException("Not Mocked: " + request);
@@ -109,6 +115,8 @@ public class DataManagerTest {
                             return new MockResponse().setResponseCode(400).setBody("{\"status\":400,\"code\":2211,\"title\":\"Invalid format for property in JSON body\",\"type\":\"https://entrecode.de/doc/error/2211\",\"_links\":{\"up\":{\"title\":\"Data Manager Home Page\",\"href\":\"https://datamanager.entrecode.de\"},\"describedby\":{\"title\":\"Error Description\",\"href\":\"https://entrecode.de/doc/error/2211\"}},\"detail\":\"Invalid type: string (expected boolean/null)\",\"verbose\":\"/done\"}");
                         case "/api/beef1234/to-do-item?id=VJY4n7vcZ":
                             return new MockResponse().setResponseCode(404).setBody("{\"status\":404,\"code\":2102,\"title\":\"No resource entity matching query string filter found\",\"type\":\"https://entrecode.de/doc/error/2102\",\"_links\":{\"up\":{\"title\":\"Data Manager Home Page\",\"href\":\"https://datamanager.entrecode.de\"},\"describedby\":{\"title\":\"Error Description\",\"href\":\"https://entrecode.de/doc/error/2102\"}},\"detail\":\"\",\"verbose\":\"\"}");
+                        case "/tag/beef1234?tag=achja":
+                            return new MockResponse().setResponseCode(200).setBody("{\"count\":1,\"tag\":\"ohjah2\",\"_links\":{\"collection\":{\"href\":\"https://datamanager.entrecode.de/tag?dataManagerID=a50ae357-91b5-4d56-ba0e-7ec476f6c07d\"},\"ec:assets/with-tag\":{\"href\":\"https://datamanager.entrecode.de/asset?dataManagerID=a50ae357-91b5-4d56-ba0e-7ec476f6c07d&tag=achja\"},\"ec:datamanager\":{\"href\":\"https://datamanager.entrecode.de/?dataManagerID=a50ae357-91b5-4d56-ba0e-7ec476f6c07d\"},\"self\":{\"href\":\"https://datamanager.entrecode.de/tag?dataManagerID=a50ae357-91b5-4d56-ba0e-7ec476f6c07d&tag=ohjah2\"},\"curies\":{\"href\":\"https://doc.entrecode.de/data_manager/#relation-{rel}\",\"templated\":true}}}");
                         default:
                             throw new RuntimeException("Not Mocked: " + request);
                     }
@@ -135,6 +143,7 @@ public class DataManagerTest {
                     }
                 case "DELETE":
                     switch (request.getPath()) {
+                        case "/tag/beef1234?tag=achja":
                         case "/api/beef1234/to-do-item?id=VJY4n7vcI":
                         case "/asset/beef1234assetID=555ebdc3-fb84-42ba-b381-3345fb6f6132":
                         case "/asset/beef1234assetID=555ebdc3-aaaa-42ba-b381-3345fb6f6132":
@@ -160,6 +169,7 @@ public class DataManagerTest {
     public void after() throws IOException {
         server.shutdown();
     }
+
 
     @Test(expected = ECMalformedDataManagerIDException.class)
     public void dmMalformedID() throws ECMalformedDataManagerIDException {
@@ -868,7 +878,7 @@ public class DataManagerTest {
     public void assetsOneWithFilter() throws IOException {
         DataManager dm = new DataManager(baseUrl, UUID.randomUUID());
         final ECList[] assets = new ECList[1];
-        dm.assets().filter(new HashMap<String, String>(){{
+        dm.assets().filter(new HashMap<String, String>() {{
             put("type", "image");
             put("title", "hmq28Oy");
         }}).onResponse(r -> assets[0] = (ECList) r).onError(e -> fail(e.stringify())).go();
@@ -1051,5 +1061,109 @@ public class DataManagerTest {
         File file = new File(cl.getResource("test.jpg").getFile());
         DataManager dm = new DataManager(baseUrl, true);
         dm.createAsset(file).onResponse(r -> fail()).onError(e -> fail(e.stringify())).go();
+    }
+
+    @Test
+    public void tagsMultiple() {
+        final ECList[] tags = new ECList[1];
+        DataManager dm = new DataManager(server.getUrl("/api/beef1234"), UUID.randomUUID());
+        dm.tags().onResponse(r -> tags[0] = r).onError(e -> fail(e.stringify())).go();
+
+        await().until(() -> tags[0] != null);
+        assertEquals(tags[0].getCount(), 2);
+        assertTrue(tags[0].getLinks() != null);
+        assertEquals(tags[0].getEmbedded().size(), 2);
+        assertTrue(tags[0].getEmbedded().get(0) instanceof ECTag);
+    }
+
+    @Test
+    public void tagOne() {
+        final ECList[] tags = new ECList[1];
+        DataManager dm = new DataManager(server.getUrl("/api/beefbeef"), true);
+        dm.tags().onResponse(r -> tags[0] = r).onError(e -> fail(e.stringify())).go();
+
+        await().until(() -> tags[0] != null);
+        assertEquals(1, tags[0].getCount());
+        assertTrue(tags[0].getEmbedded().get(0) instanceof ECTag);
+        assertEquals(1, tags[0].getEmbedded().size());
+    }
+
+    @Test
+    public void tagNone() {
+        DataManager dm = new DataManager(server.getUrl("/api/beeffeed"), true);
+        final ECList[] tags = new ECList[1];
+        dm.tags().onResponse(r -> tags[0] = r).onError(e -> fail(e.stringify())).go();
+
+        await().until(() -> tags[0] != null);
+        assertEquals(0, tags[0].getCount());
+        assertEquals(0, tags[0].getTotal());
+    }
+
+    @Test
+    public void tagExistingReadOnlyDM() {
+        final ECTag[] tag = new ECTag[1];
+        DataManager dm = new DataManager(baseUrl, true);
+        dm.tag("achja").onResponse(r -> tag[0] = r).onError(e -> fail(e.stringify())).go();
+
+        await().until(() -> tag[0] != null);
+        assertEquals("achja", tag[0].getTag());
+        assertEquals(1, tag[0].getCount());
+        assertTrue(tag[0].getLinks() != null);
+    }
+
+    @Test
+    public void tagNonexistant() {
+        final ECError[] error = new ECError[1];
+        DataManager dm = new DataManager(baseUrl, true);
+        dm.tag("nonexistant").onResponse(r -> fail()).onError(e -> error[0] = e).go();
+
+        await().until(() -> error[0] != null);
+        assertEquals(404, error[0].getStatus());
+        assertEquals(2102, error[0].getCode());
+    }
+
+    @Test
+    public void tagSave() {
+        final ECTag[] tag = new ECTag[1];
+        DataManager dm = new DataManager(baseUrl, UUID.fromString("5c4ad68e-d03e-4476-92b3-1f0ae06c162e"));
+        dm.tag("achja").onResponse(t -> {
+            JsonObject links = t.getLinks();
+            JsonObject self = links.get("self").getAsJsonObject();
+            self.addProperty("href", dm.getTagUrl() + "?tag=achja");
+            links.add("self", self);
+            t.setLinks(links);
+            t.setTag("ohjah2");
+            t.save().onResponse(r -> tag[0] = r).onError(e2 -> fail(e2.stringify())).go();
+        }).onError(e -> fail(e.stringify())).go();
+        await().until(() -> tag[0] != null);
+        assertEquals("ohjah2", tag[0].getTag());
+    }
+
+    @Test
+    public void tagDelete() {
+        final boolean[] response = new boolean[1];
+        DataManager dm = new DataManager(baseUrl, UUID.fromString("5c4ad68e-d03e-4476-92b3-1f0ae06c162e"));
+        dm.tag("achja").onResponse(t -> {
+            JsonObject links = t.getLinks();
+            JsonObject self = links.get("self").getAsJsonObject();
+            self.addProperty("href", dm.getTagUrl() + "?tag=achja");
+            links.add("self", self);
+            t.setLinks(links);
+            t.delete().onResponse(r -> response[0] = r).onError(e2 -> fail(e2.stringify())).go();
+        }).onError(e -> fail(e.stringify())).go();
+        await().until(() -> response[0]);
+        assertTrue(response[0]);
+    }
+
+    @Test(expected = ECDataMangerInReadOnlyModeException.class)
+    public void tagSaveOnReadOnlyDM() {
+        final ECTag tag = new ECTag();
+        tag.save().onResponse(r -> fail()).onError(e2 -> fail(e2.stringify())).go();
+    }
+
+    @Test(expected = ECDataMangerInReadOnlyModeException.class)
+    public void tagDeleteOnReadOnlyDM() {
+        final ECTag tag = new ECTag();
+        tag.delete().onResponse(t -> fail()).onError(e -> fail(e.stringify())).go();
     }
 }

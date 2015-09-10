@@ -12,6 +12,8 @@ import de.entrecode.datamanager_java_sdk.requests.entries.ECEntryPostRequest;
 import de.entrecode.datamanager_java_sdk.requests.entries.ECEntryRequest;
 import de.entrecode.datamanager_java_sdk.requests.files.ECFileURLRequest;
 import de.entrecode.datamanager_java_sdk.requests.models.ECModelListRequest;
+import de.entrecode.datamanager_java_sdk.requests.tags.ECTagRequest;
+import de.entrecode.datamanager_java_sdk.requests.tags.ECTagsRequest;
 
 import java.io.File;
 import java.net.URL;
@@ -30,6 +32,7 @@ public class DataManager {
 
     private String mUrl;
     private String mAssetUrl;
+    private String mTagUrl;
     private String mID;
     private UUID mAccessToken;
     private boolean mReadOnly = false;
@@ -47,6 +50,7 @@ public class DataManager {
         appendSlashIfNeeded();
         makeID();
         mAssetUrl = mUrl.replace("/api/" + mID + "/", "/asset/" + mID);
+        mTagUrl = mUrl.replace("/api/" + mID + "/", "/tag/" + mID);
     }
 
     /**
@@ -65,6 +69,7 @@ public class DataManager {
         appendSlashIfNeeded();
         makeID();
         mAssetUrl = mUrl.replace("/api/" + mID + "/", "/asset/" + mID);
+        mTagUrl = mUrl.replace("/api/" + mID + "/", "/tag/" + mID);
     }
 
     /**
@@ -82,6 +87,7 @@ public class DataManager {
         mID = id;
         mUrl = baseAPIUrl + id.toLowerCase() + "/";
         mAssetUrl = mUrl.replace("/api/" + mID + "/", "/asset/" + mID);
+        mTagUrl = mUrl.replace("/api/" + mID + "/", "/tag/" + mID);
         mAccessToken = accessToken;
     }
 
@@ -103,6 +109,7 @@ public class DataManager {
         mID = id;
         mUrl = baseAPIUrl + id.toLowerCase() + "/";
         mAssetUrl = mUrl.replace("/api/" + mID + "/", "/asset/" + mID);
+        mTagUrl = mUrl.replace("/api/" + mID + "/", "/tag/" + mID);
         mReadOnly = readOnly;
     }
 
@@ -193,6 +200,15 @@ public class DataManager {
      */
     public String getAssetUrl() {
         return mAssetUrl;
+    }
+
+    /**
+     * Get the tag url of this DataManager object.
+     *
+     * @return Url of the tag API of the Data Manager this DataManager object is connected to.
+     */
+    public String getTagUrl() {
+        return mTagUrl;
     }
 
     /**
@@ -432,5 +448,42 @@ public class DataManager {
         }
 
         return new ECAssetsPostRequest(this, files);
+    }
+
+    /**
+     * Method for requesting the tag list in the connected Data Manager.
+     * <br><br>
+     * Examlple:
+     * <pre>{@code
+     *      dataManager.tags().onResponse(tagList -> {
+     *         // do something
+     *     }).onError(error -> {
+     *         System.out.println(error.stringify());
+     *     }).go();
+     * }</pre>
+     *
+     * @return ECTagsRequest
+     */
+    public ECTagsRequest tags() {
+        return new ECTagsRequest(this);
+    }
+
+    /**
+     * Requests a single tag of the connected Data Manager.
+     * <br><br>
+     * Example:
+     * <pre>{@code
+     *     dataManager.tag("coleslaw").onResponse(tag -> {
+     *         // do something
+     *     }).onError(error -> {
+     *         System.out.println(error.stringify());
+     *     }).go();
+     * }</pre>
+     *
+     * @param tag The tag name of the tag to request.
+     * @return ECTagRequest
+     */
+    public ECTagRequest tag(String tag) {
+        return new ECTagRequest(this, tag);
     }
 }

@@ -5,7 +5,7 @@ import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.RequestBody;
 import de.entrecode.datamanager_java_sdk.exceptions.ECDataMangerInReadOnlyModeException;
 import de.entrecode.datamanager_java_sdk.requests.entries.ECEntryDeleteRequest;
-import de.entrecode.datamanager_java_sdk.requests.entries.ECEntrySaveRequest;
+import de.entrecode.datamanager_java_sdk.requests.entries.ECEntryPutRequest;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
@@ -135,14 +135,14 @@ public class ECEntry {
      *     }).go();
      * }</pre>
      *
-     * @return ECEntrySaveRequest
+     * @return ECEntryPutRequest
      */
-    public ECEntrySaveRequest save() {
+    public ECEntryPutRequest save() {
         if (mAuthHeaderValue == null) {
             throw new ECDataMangerInReadOnlyModeException();
         }
 
-        return (ECEntrySaveRequest) new ECEntrySaveRequest(
+        return (ECEntryPutRequest) new ECEntryPutRequest(
                 mAuthHeaderValue,
                 _links.getAsJsonObject("self")
                         .get("href").getAsString()).body(this.toBody());
@@ -214,6 +214,8 @@ public class ECEntry {
                         values.put(String.valueOf(elem.getKey()), current.getAsBoolean());
                     } else if (current.isJsonPrimitive() && current.getAsJsonPrimitive().isNumber()) {
                         values.put(String.valueOf(elem.getKey()), current.getAsNumber());
+                    } else if (current.isJsonPrimitive()) {
+                        values.put(String.valueOf(elem.getKey()), current.getAsJsonPrimitive());
                     } else {
                         values.put(String.valueOf(elem.getKey()), current);
                     }
