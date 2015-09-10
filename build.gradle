@@ -49,6 +49,26 @@ test {
     */
 }
 
+jacoco {
+    toolVersion = "0.7.1.201405082137"
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        csv.enabled false
+        html.enabled true
+    }
+}
+jacocoTestReport.dependsOn test
+
+task clover(type: Exec) {
+    workingDir "$buildDir/reports/jacoco/test"
+
+    commandLine '../../../../cover2cover/run.sh'
+}
+clover.dependsOn jacocoTestReport
+
 uploadArchives {
     repositories {
         mavenDeployer {
