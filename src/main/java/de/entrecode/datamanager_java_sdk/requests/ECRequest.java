@@ -116,6 +116,7 @@ public abstract class ECRequest<T> {
         call.enqueue(new Callback() {
             @Override
             public void onFailure(Request request, IOException e) {
+                // only happens with connection errors
                 if (mErrorListener != null) {
                     mErrorListener.onError(new ECError(e.getMessage()));
                 } else {
@@ -135,6 +136,7 @@ public abstract class ECRequest<T> {
                             }
                             mErrorListener.onError(err);
                         } catch (Exception e) {
+                            // should never happen
                             ECError err = new ECError("Unmatched ECError.");
                             err.setStatus(response.code());
                             mErrorListener.onError(err);
