@@ -14,14 +14,14 @@ Get via Maven:
 <dependency>
   <groupId>de.entrecode</groupId>
   <artifactId>datamanager_java_sdk</artifactId>
-  <version>0.2.3</version>
+  <version>0.4.0</version>
 </dependency>
 ```
 
 or with Gradle:
 
 ```java
-compile 'de.entrecode:datamanager_java_sdk:0.2.3'
+compile 'de.entrecode:datamanager_java_sdk:0.4.0'
 ```
 
 ## Usage
