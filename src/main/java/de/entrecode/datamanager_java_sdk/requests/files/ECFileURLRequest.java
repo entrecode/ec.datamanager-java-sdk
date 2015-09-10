@@ -82,8 +82,7 @@ public class ECFileURLRequest extends ECRequest<String> {
         }
 
         HttpUrl.Builder urlBuilder = HttpUrl.parse(this.mDataManager.getUrl()
-                .replace("datamanager", "f")
-                .replace("api/" + this.mDataManager.getID() + "/", mAssetID) + "/url").newBuilder();
+                .replace("api/" + this.mDataManager.getID() + "/", "files/" + mAssetID) + "/url").newBuilder();
 
         // add nocrop query param for thumbnails
         if (isImage) {

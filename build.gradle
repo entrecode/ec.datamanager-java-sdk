@@ -1,19 +1,18 @@
 group 'de.entrecode'
-version '0.2.3'
+version '0.4.0'
 
 apply plugin: 'java'
 apply plugin: 'jacoco'
 apply plugin: 'maven'
-//apply plugin: 'signing'
+apply plugin: 'signing'
 
-//archivesBaseName = "ec-datamanager_java_sdk"
+archivesBaseName = "ec-datamanager-java-sdk"
 
 repositories {
     mavenCentral()
     jcenter()
 }
 
-//noinspection GroovyAssignabilityCheck
 dependencies {
     testCompile 'junit:junit:4.11'
     testCompile 'com.squareup.okhttp:mockwebserver:2.4.0'
@@ -22,7 +21,6 @@ dependencies {
     compile 'com.google.code.gson:gson:2.3.1'
 }
 
-//noinspection GroovyAssignabilityCheck
 task javadocJar(type: Jar) {
     classifier = 'javadoc'
     from javadoc
@@ -37,11 +35,9 @@ artifacts {
     archives javadocJar, sourcesJar
 }
 
-/*
 signing {
     sign configurations.archives
 }
-*/
 
 test {
     // we always want the tests to be executed
@@ -53,33 +49,51 @@ test {
     */
 }
 
+jacoco {
+    toolVersion = "0.7.1.201405082137"
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        csv.enabled false
+        html.enabled true
+    }
+}
+jacocoTestReport.dependsOn test
+
+task clover(type: Exec) {
+    workingDir "$buildDir/reports/jacoco/test"
+
+    commandLine '../../../../cover2cover/run.sh'
+}
+clover.dependsOn jacocoTestReport
+
 uploadArchives {
     repositories {
         mavenDeployer {
-            //beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
-            repository(url: "file://localhost/Users/simon/Documents/entrecodeGmbH/MavenRepo/")
+            //repository(url: "file://localhost/Users/simon/Documents/entrecodeGmbH/MavenRepo/")
 
-            /*
-            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2") {
                 authentication(userName: ossrhUsername, password: ossrhPassword)
             }
-            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots") {
                 authentication(userName: ossrhUsername, password: ossrhPassword)
             }
-            */
 
             pom.project {
                 name 'Java SDK for ec.datamanager'
                 packaging 'jar'
                 // optionally artifactId can be defined here
-                description 'The official Java SKD for Datamanager by entrecode. By entrecode.'
+                description 'The official Java SDK for Datamanager by entrecode. By entrecode.'
                 url 'https://entrecode.de'
-                
+
                 scm {
                     connection 'scm:git:https://github.com/entrecode/ec.datamanager-java-sdk.git'
                     developerConnection 'scm:git:https://github.com/entrecode/ec.datamanager-java-sdk.git'
-                    url 'https://github.com/entrecode/ec.datamanager-java-sdk.git'
+                    url 'git@github.com:entrecode/ec.datamanager-java-sdk.git'
                 }
                 licenses {
                     license {

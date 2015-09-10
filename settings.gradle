@@ -1,8 +1,1 @@
 rootProject.name = 'ec-datamanager-java-sdk'
-
-//signing.keyId=YourKeyId
-//signing.password=YourPublicKeyPassword
-//signing.secretKeyRingFile=PathToYourKeyRingFile
-
-//ossrhUsername=your-jira-id
-//ossrhPassword=your-jira-password

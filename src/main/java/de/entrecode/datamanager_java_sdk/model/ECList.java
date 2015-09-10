@@ -56,6 +56,8 @@ public class ECList<T> {
                     ((ECEntry) elem).mAuthHeaderValue = mAuthHeaderValue;
                 } else if (elem instanceof ECAsset) {
                     ((ECAsset) elem).mAuthHeaderValue = mAuthHeaderValue;
+                } else if (elem instanceof ECTag) {
+                    ((ECTag) elem).mAuthHeaderValue = mAuthHeaderValue;
                 }
             }
         }

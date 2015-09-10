@@ -9,10 +9,7 @@ import de.entrecode.datamanager_java_sdk.DataManager;
 import de.entrecode.datamanager_java_sdk.Model;
 import de.entrecode.datamanager_java_sdk.exceptions.ECDataMangerInReadOnlyModeException;
 import de.entrecode.datamanager_java_sdk.exceptions.ECMalformedDataManagerIDException;
-import de.entrecode.datamanager_java_sdk.model.ECAsset;
-import de.entrecode.datamanager_java_sdk.model.ECEntry;
-import de.entrecode.datamanager_java_sdk.model.ECError;
-import de.entrecode.datamanager_java_sdk.model.ECList;
+import de.entrecode.datamanager_java_sdk.model.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,6 +19,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -40,28 +38,39 @@ public class DataManagerTest {
             switch (request.getMethod()) {
                 case "GET":
                     switch (request.getPath()) {
+                        case "/tag/beef1234?tag=achja":
+                            return new MockResponse().setResponseCode(200).setBody("{\"count\":1,\"tag\":\"achja\",\"_links\":{\"collection\":{\"href\":\"https://datamanager.entrecode.de/tag?dataManagerID=a50ae357-91b5-4d56-ba0e-7ec476f6c07d\"},\"ec:assets/with-tag\":{\"href\":\"https://datamanager.entrecode.de/asset?dataManagerID=a50ae357-91b5-4d56-ba0e-7ec476f6c07d&tag=achja\"},\"ec:datamanager\":{\"href\":\"https://datamanager.entrecode.de/?dataManagerID=a50ae357-91b5-4d56-ba0e-7ec476f6c07d\"},\"self\":{\"href\":\"https://datamanager.entrecode.de/tag?dataManagerID=a50ae357-91b5-4d56-ba0e-7ec476f6c07d&tag=achja\"},\"curies\":{\"href\":\"https://doc.entrecode.de/data_manager/#relation-{rel}\",\"templated\":true}}}");
+                        case "/tag/beeffeed?size=10&page=1":
+                            return new MockResponse().setResponseCode(200).setBody("{\"count\":0,\"total\":0,\"_links\":{\"curies\":{\"href\":\"https://doc.entrecode.de/data_manager/#relation-{rel}\",\"templated\":true},\"ec:assets\":{\"href\":\"https://datamanager.entrecode.de/asset?dataManagerID=a50ae357-91b5-4d56-ba0e-7ec476f6c07d\"},\"ec:datamanager\":{\"href\":\"https://datamanager.entrecode.de/?dataManagerID=a50ae357-91b5-4d56-ba0e-7ec476f6c07d\"},\"ec:tags/options\":{\"href\":\"https://datamanager.entrecode.de/tag/f84710b8{?dataManagerID,page,size,sort,tag,tag~}\",\"templated\":true},\"self\":{\"href\":\"https://datamanager.entrecode.de/tag/f84710b8\"}}}");
+                        case "/tag/beefbeef?size=10&page=1":
+                            return new MockResponse().setResponseCode(200).setBody("{\"count\":1,\"total\":1,\"_links\":{\"curies\":{\"href\":\"https://doc.entrecode.de/data_manager/#relation-{rel}\",\"templated\":true},\"ec:assets\":{\"href\":\"https://datamanager.entrecode.de/asset?dataManagerID=a50ae357-91b5-4d56-ba0e-7ec476f6c07d\"},\"ec:datamanager\":{\"href\":\"https://datamanager.entrecode.de/?dataManagerID=a50ae357-91b5-4d56-ba0e-7ec476f6c07d\"},\"ec:tags/options\":{\"href\":\"https://datamanager.entrecode.de/tag/f84710b8{?dataManagerID,page,size,sort,tag,tag~}\",\"templated\":true},\"self\":{\"href\":\"https://datamanager.entrecode.de/tag/f84710b8\"}},\"_embedded\":{\"ec:tag\":{\"count\":1,\"tag\":\"achja\",\"_links\":{\"collection\":{\"href\":\"https://datamanager.entrecode.de/tag?dataManagerID=a50ae357-91b5-4d56-ba0e-7ec476f6c07d\"},\"ec:assets/with-tag\":{\"href\":\"https://datamanager.entrecode.de/asset?dataManagerID=a50ae357-91b5-4d56-ba0e-7ec476f6c07d&tag=achja\"},\"ec:datamanager\":{\"href\":\"https://datamanager.entrecode.de/?dataManagerID=a50ae357-91b5-4d56-ba0e-7ec476f6c07d\"},\"self\":{\"href\":\"https://datamanager.entrecode.de/tag?dataManagerID=a50ae357-91b5-4d56-ba0e-7ec476f6c07d&tag=achja\"}}}}}");
+                        case "/tag/beef1234?size=10&page=1":
+                            return new MockResponse().setResponseCode(200).setBody("{\"count\":2,\"total\":2,\"_links\":{\"curies\":{\"href\":\"https://doc.entrecode.de/data_manager/#relation-{rel}\",\"templated\":true},\"ec:assets\":{\"href\":\"https://datamanager.entrecode.de/asset?dataManagerID=a50ae357-91b5-4d56-ba0e-7ec476f6c07d\"},\"ec:datamanager\":{\"href\":\"https://datamanager.entrecode.de/?dataManagerID=a50ae357-91b5-4d56-ba0e-7ec476f6c07d\"},\"ec:tags/options\":{\"href\":\"https://datamanager.entrecode.de/tag/f84710b8{?dataManagerID,page,size,sort,tag,tag~}\",\"templated\":true},\"self\":{\"href\":\"https://datamanager.entrecode.de/tag/f84710b8\"}},\"_embedded\":{\"ec:tag\":[{\"count\":1,\"tag\":\"achja\",\"_links\":{\"collection\":{\"href\":\"https://datamanager.entrecode.de/tag?dataManagerID=a50ae357-91b5-4d56-ba0e-7ec476f6c07d\"},\"ec:assets/with-tag\":{\"href\":\"https://datamanager.entrecode.de/asset?dataManagerID=a50ae357-91b5-4d56-ba0e-7ec476f6c07d&tag=achja\"},\"ec:datamanager\":{\"href\":\"https://datamanager.entrecode.de/?dataManagerID=a50ae357-91b5-4d56-ba0e-7ec476f6c07d\"},\"self\":{\"href\":\"https://datamanager.entrecode.de/tag?dataManagerID=a50ae357-91b5-4d56-ba0e-7ec476f6c07d&tag=achja\"}}},{\"count\":1,\"tag\":\"ohja\",\"_links\":{\"collection\":{\"href\":\"https://datamanager.entrecode.de/tag?dataManagerID=a50ae357-91b5-4d56-ba0e-7ec476f6c07d\"},\"ec:assets/with-tag\":{\"href\":\"https://datamanager.entrecode.de/asset?dataManagerID=a50ae357-91b5-4d56-ba0e-7ec476f6c07d&tag=ohja\"},\"ec:datamanager\":{\"href\":\"https://datamanager.entrecode.de/?dataManagerID=a50ae357-91b5-4d56-ba0e-7ec476f6c07d\"},\"self\":{\"href\":\"https://datamanager.entrecode.de/tag?dataManagerID=a50ae357-91b5-4d56-ba0e-7ec476f6c07d&tag=ohja\"}}}]}}");
                         case "/api/beef1234/user?id=QkHCflm2":
-                            return new MockResponse().setResponseCode(200).setBody("{\"count\":1,\"total\":1,\"_links\":{\"collection\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234\"},\"curies\":{\"name\":\"beef1234\",\"href\":\"https://datamanager.entrecode.de/api/doc/beef1234/{rel}\",\"templated\":true},\"self\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/user?id=QkHCflm2\"},\"beef1234:user/options\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/user{?created,createdFrom,createdTo,id,modified,modifiedFrom,modifiedTo,page,private,size,sort,temporaryToken,temporaryToken~}\",\"templated\":true}},\"_embedded\":{\"beef1234:user\":{\"id\":\"QkHCflm2\",\"created\":\"2015-04-17T07:46:24.908Z\",\"modified\":\"2015-04-17T07:46:24.908Z\",\"private\":true,\"temporaryToken\":\"e63dca99-6a56-43a5-8864-1a63ee8565e7\",\"_links\":{\"collection\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/user\"},\"self\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/user?id=QkHCflm2\"},\"f84710b8:user/creator\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/user?id=QkHCflm2\"}}}}}");
+                            return new MockResponse().setResponseCode(200).setBody("{\"id\":\"QkHCflm2\",\"created\":\"2015-04-17T07:46:24.908Z\",\"modified\":\"2015-04-17T07:46:24.908Z\",\"private\":true,\"temporaryToken\":\"e63dca99-6a56-43a5-8864-1a63ee8565e7\",\"_links\":{\"collection\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/user\"},\"self\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/user?id=QkHCflm2\"},\"f84710b8:user/creator\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/user?id=QkHCflm2\"}}}");
                         case "/asset/beef1234?assetID=4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd":
                             return new MockResponse().setResponseCode(200).setBody("{\"assetID\":\"4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd\",\"created\":\"2015-06-17T11:35:52.560Z\",\"files\":[{\"url\":\"https://ec-datamanager-default-bucket.s3.amazonaws.com//home/www/datamanagerfiles/c024f209/rcf4bgN0mQWl35PuQ8w08SVh.jpg\",\"mimetype\":\"image/jpeg\",\"size\":395285,\"resolution\":{\"width\":1080,\"height\":1920},\"locale\":null,\"created\":\"2015-06-17T13:35:52.553+02:00\",\"modified\":\"2015-06-17T13:35:52.553+02:00\",\"assetID\":\"4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd\"},{\"url\":\"https://ec-datamanager-default-bucket.s3.amazonaws.com//home/www/datamanagerfiles/c024f209/rcf4bgN0mQWl35PuQ8w08SVh_256.jpg\",\"mimetype\":\"image/jpeg\",\"size\":7653,\"resolution\":{\"width\":144,\"height\":256},\"locale\":null,\"created\":\"2015-06-17T13:35:52.734+02:00\",\"modified\":\"2015-06-17T13:35:52.734+02:00\",\"assetID\":\"4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd\"},{\"url\":\"https://ec-datamanager-default-bucket.s3.amazonaws.com//home/www/datamanagerfiles/c024f209/rcf4bgN0mQWl35PuQ8w08SVh_50.jpg\",\"mimetype\":\"image/jpeg\",\"size\":1992,\"resolution\":{\"width\":50,\"height\":50},\"locale\":null,\"created\":\"2015-06-17T13:35:52.739+02:00\",\"modified\":\"2015-06-17T13:35:52.739+02:00\",\"assetID\":\"4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd\"},{\"url\":\"https://ec-datamanager-default-bucket.s3.amazonaws.com//home/www/datamanagerfiles/c024f209/rcf4bgN0mQWl35PuQ8w08SVh_1024.jpg\",\"mimetype\":\"image/jpeg\",\"size\":59724,\"resolution\":{\"width\":576,\"height\":1024},\"locale\":null,\"created\":\"2015-06-17T13:35:52.742+02:00\",\"modified\":\"2015-06-17T13:35:52.742+02:00\",\"assetID\":\"4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd\"},{\"url\":\"https://ec-datamanager-default-bucket.s3.amazonaws.com//home/www/datamanagerfiles/c024f209/rcf4bgN0mQWl35PuQ8w08SVh_400.jpg\",\"mimetype\":\"image/jpeg\",\"size\":21261,\"resolution\":{\"width\":400,\"height\":400},\"locale\":null,\"created\":\"2015-06-17T13:35:52.748+02:00\",\"modified\":\"2015-06-17T13:35:52.748+02:00\",\"assetID\":\"4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd\"},{\"url\":\"https://ec-datamanager-default-bucket.s3.amazonaws.com//home/www/datamanagerfiles/c024f209/rcf4bgN0mQWl35PuQ8w08SVh_512.jpg\",\"mimetype\":\"image/jpeg\",\"size\":20270,\"resolution\":{\"width\":288,\"height\":512},\"locale\":null,\"created\":\"2015-06-17T13:35:52.75+02:00\",\"modified\":\"2015-06-17T13:35:52.75+02:00\",\"assetID\":\"4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd\"},{\"url\":\"https://ec-datamanager-default-bucket.s3.amazonaws.com//home/www/datamanagerfiles/c024f209/rcf4bgN0mQWl35PuQ8w08SVh_200.jpg\",\"mimetype\":\"image/jpeg\",\"size\":8119,\"resolution\":{\"width\":200,\"height\":200},\"locale\":null,\"created\":\"2015-06-17T13:35:52.752+02:00\",\"modified\":\"2015-06-17T13:35:52.752+02:00\",\"assetID\":\"4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd\"},{\"url\":\"https://ec-datamanager-default-bucket.s3.amazonaws.com//home/www/datamanagerfiles/c024f209/rcf4bgN0mQWl35PuQ8w08SVh_100.jpg\",\"mimetype\":\"image/jpeg\",\"size\":3676,\"resolution\":{\"width\":100,\"height\":100},\"locale\":null,\"created\":\"2015-06-17T13:35:52.765+02:00\",\"modified\":\"2015-06-17T13:35:52.765+02:00\",\"assetID\":\"4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd\"}],\"tags\":[],\"title\":\"test\",\"type\":\"image\",\"_links\":{\"collection\":{\"href\":\"https://datamanager.angus.entrecode.de/asset/beef1234\"},\"ec:asset/best-file\":{\"href\":\"https://f.angus.entrecode.de/4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd\"},\"self\":{\"href\":\"https://datamanager.angus.entrecode.de/asset/beef1234?assetID=4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd\",\"title\":\"test\"},\"ec:api/asset/creator\":{\"href\":\"https://datamanager.angus.entrecode.de/api/beef1234/user?id=V1xSU1EqU\"},\"curies\":{\"href\":\"https://angus.entrecode.de/doc/rel/{rel}\",\"templated\":true}}}");
                         case "/asset/beef1234?size=10&page=1":
                             return new MockResponse().setResponseCode(200).setBody("{\"count\":1,\"total\":1,\"_links\":{\"curies\":{\"href\":\"https://angus.entrecode.de/doc/rel/{rel}\",\"templated\":true},\"ec:api/asset/by-id\":{\"href\":\"https://datamanager.angus.entrecode.de/asset/beeffeed{?assetID}\",\"templated\":true},\"ec:api\":{\"href\":\"https://datamanager.angus.entrecode.de/api/beeffeed\"},\"ec:assets/options\":{\"href\":\"https://datamanager.angus.entrecode.de/asset/beeffeed{?assetID,created,createdFrom,createdTo,created~,creator,dataManagerID,page,size,sort,tag,title,title~,type,type~}\",\"templated\":true},\"self\":{\"href\":\"https://datamanager.angus.entrecode.de/asset/beeffeed\"},\"next\":{\"href\":\"https://datamanager.angus.entrecode.de/asset/beeffeed?page=2\"}},\"_embedded\":{\"ec:api/asset\":{\"assetID\":\"3d1dcc0f-cb33-4c39-892b-1afbab9395b0\",\"created\":\"2015-06-17T10:13:10.190Z\",\"files\":[{\"url\":\"https://ec-datamanager-default-bucket.s3.amazonaws.com//home/www/datamanagerfiles/beeffeed/aYo_T7CFB0ylemZhcxrY_iwj.jpg\",\"mimetype\":\"image/jpeg\",\"size\":395285,\"resolution\":{\"width\":1080,\"height\":1920},\"locale\":null,\"created\":\"2015-06-17T12:13:10.118+02:00\",\"modified\":\"2015-06-17T12:13:10.118+02:00\",\"assetID\":\"3d1dcc0f-cb33-4c39-892b-1afbab9395b0\"},{\"url\":\"https://ec-datamanager-default-bucket.s3.amazonaws.com//home/www/datamanagerfiles/beeffeed/aYo_T7CFB0ylemZhcxrY_iwj_200.jpg\",\"mimetype\":\"image/jpeg\",\"size\":8119,\"resolution\":{\"width\":200,\"height\":200},\"locale\":null,\"created\":\"2015-06-17T12:13:10.504+02:00\",\"modified\":\"2015-06-17T12:13:10.504+02:00\",\"assetID\":\"3d1dcc0f-cb33-4c39-892b-1afbab9395b0\"},{\"url\":\"https://ec-datamanager-default-bucket.s3.amazonaws.com//home/www/datamanagerfiles/beeffeed/aYo_T7CFB0ylemZhcxrY_iwj_512.jpg\",\"mimetype\":\"image/jpeg\",\"size\":20270,\"resolution\":{\"width\":288,\"height\":512},\"locale\":null,\"created\":\"2015-06-17T12:13:10.507+02:00\",\"modified\":\"2015-06-17T12:13:10.507+02:00\",\"assetID\":\"3d1dcc0f-cb33-4c39-892b-1afbab9395b0\"},{\"url\":\"https://ec-datamanager-default-bucket.s3.amazonaws.com//home/www/datamanagerfiles/beeffeed/aYo_T7CFB0ylemZhcxrY_iwj_400.jpg\",\"mimetype\":\"image/jpeg\",\"size\":21261,\"resolution\":{\"width\":400,\"height\":400},\"locale\":null,\"created\":\"2015-06-17T12:13:10.511+02:00\",\"modified\":\"2015-06-17T12:13:10.511+02:00\",\"assetID\":\"3d1dcc0f-cb33-4c39-892b-1afbab9395b0\"},{\"url\":\"https://ec-datamanager-default-bucket.s3.amazonaws.com//home/www/datamanagerfiles/beeffeed/aYo_T7CFB0ylemZhcxrY_iwj_1024.jpg\",\"mimetype\":\"image/jpeg\",\"size\":59724,\"resolution\":{\"width\":576,\"height\":1024},\"locale\":null,\"created\":\"2015-06-17T12:13:10.515+02:00\",\"modified\":\"2015-06-17T12:13:10.515+02:00\",\"assetID\":\"3d1dcc0f-cb33-4c39-892b-1afbab9395b0\"},{\"url\":\"https://ec-datamanager-default-bucket.s3.amazonaws.com//home/www/datamanagerfiles/beeffeed/aYo_T7CFB0ylemZhcxrY_iwj_256.jpg\",\"mimetype\":\"image/jpeg\",\"size\":7653,\"resolution\":{\"width\":144,\"height\":256},\"locale\":null,\"created\":\"2015-06-17T12:13:10.525+02:00\",\"modified\":\"2015-06-17T12:13:10.525+02:00\",\"assetID\":\"3d1dcc0f-cb33-4c39-892b-1afbab9395b0\"},{\"url\":\"https://ec-datamanager-default-bucket.s3.amazonaws.com//home/www/datamanagerfiles/beeffeed/aYo_T7CFB0ylemZhcxrY_iwj_50.jpg\",\"mimetype\":\"image/jpeg\",\"size\":1992,\"resolution\":{\"width\":50,\"height\":50},\"locale\":null,\"created\":\"2015-06-17T12:13:10.525+02:00\",\"modified\":\"2015-06-17T12:13:10.525+02:00\",\"assetID\":\"3d1dcc0f-cb33-4c39-892b-1afbab9395b0\"},{\"url\":\"https://ec-datamanager-default-bucket.s3.amazonaws.com//home/www/datamanagerfiles/beeffeed/aYo_T7CFB0ylemZhcxrY_iwj_100.jpg\",\"mimetype\":\"image/jpeg\",\"size\":3676,\"resolution\":{\"width\":100,\"height\":100},\"locale\":null,\"created\":\"2015-06-17T12:13:10.525+02:00\",\"modified\":\"2015-06-17T12:13:10.525+02:00\",\"assetID\":\"3d1dcc0f-cb33-4c39-892b-1afbab9395b0\"}],\"tags\":[],\"title\":\"test\",\"type\":\"image\",\"_links\":{\"collection\":{\"href\":\"https://datamanager.angus.entrecode.de/asset/beeffeed\"},\"ec:asset/best-file\":{\"href\":\"https://f.angus.entrecode.de/3d1dcc0f-cb33-4c39-892b-1afbab9395b0\"},\"self\":{\"href\":\"https://datamanager.angus.entrecode.de/asset/beeffeed?assetID=3d1dcc0f-cb33-4c39-892b-1afbab9395b0\",\"title\":\"test\"},\"ec:api/asset/creator\":{\"href\":\"https://datamanager.angus.entrecode.de/api/beeffeed/user?id=V1xSU1EqU\"}}}}}");
                         case "/asset/beefbeef?size=10&page=1":
+                        case "/asset/beefbeef?size=2&page=1":
                             return new MockResponse().setResponseCode(200).setBody("{\"count\":2,\"total\":2,\"_links\":{\"curies\":{\"href\":\"https://angus.entrecode.de/doc/rel/{rel}\",\"templated\":true},\"ec:api/asset/by-id\":{\"href\":\"https://datamanager.angus.entrecode.de/asset/beef1234{?assetID}\",\"templated\":true},\"ec:api\":{\"href\":\"https://datamanager.angus.entrecode.de/api/beef1234\"},\"ec:assets/options\":{\"href\":\"https://datamanager.angus.entrecode.de/asset/beef1234{?assetID,created,createdFrom,createdTo,created~,creator,dataManagerID,page,size,sort,tag,title,title~,type,type~}\",\"templated\":true},\"self\":{\"href\":\"https://datamanager.angus.entrecode.de/asset/beef1234\"},\"next\":{\"href\":\"https://datamanager.angus.entrecode.de/asset/beef1234?page=2\"}},\"_embedded\":{\"ec:api/asset\":[{\"assetID\":\"4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd\",\"created\":\"2015-06-17T11:35:52.560Z\",\"files\":[{\"url\":\"https://ec-datamanager-default-bucket.s3.amazonaws.com//home/www/datamanagerfiles/beef1234/rcf4bgN0mQWl35PuQ8w08SVh.jpg\",\"mimetype\":\"image/jpeg\",\"size\":395285,\"resolution\":{\"width\":1080,\"height\":1920},\"locale\":null,\"created\":\"2015-06-17T13:35:52.553+02:00\",\"modified\":\"2015-06-17T13:35:52.553+02:00\",\"assetID\":\"4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd\"},{\"url\":\"https://ec-datamanager-default-bucket.s3.amazonaws.com//home/www/datamanagerfiles/beef1234/rcf4bgN0mQWl35PuQ8w08SVh_256.jpg\",\"mimetype\":\"image/jpeg\",\"size\":7653,\"resolution\":{\"width\":144,\"height\":256},\"locale\":null,\"created\":\"2015-06-17T13:35:52.734+02:00\",\"modified\":\"2015-06-17T13:35:52.734+02:00\",\"assetID\":\"4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd\"},{\"url\":\"https://ec-datamanager-default-bucket.s3.amazonaws.com//home/www/datamanagerfiles/beef1234/rcf4bgN0mQWl35PuQ8w08SVh_50.jpg\",\"mimetype\":\"image/jpeg\",\"size\":1992,\"resolution\":{\"width\":50,\"height\":50},\"locale\":null,\"created\":\"2015-06-17T13:35:52.739+02:00\",\"modified\":\"2015-06-17T13:35:52.739+02:00\",\"assetID\":\"4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd\"},{\"url\":\"https://ec-datamanager-default-bucket.s3.amazonaws.com//home/www/datamanagerfiles/beef1234/rcf4bgN0mQWl35PuQ8w08SVh_1024.jpg\",\"mimetype\":\"image/jpeg\",\"size\":59724,\"resolution\":{\"width\":576,\"height\":1024},\"locale\":null,\"created\":\"2015-06-17T13:35:52.742+02:00\",\"modified\":\"2015-06-17T13:35:52.742+02:00\",\"assetID\":\"4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd\"},{\"url\":\"https://ec-datamanager-default-bucket.s3.amazonaws.com//home/www/datamanagerfiles/beef1234/rcf4bgN0mQWl35PuQ8w08SVh_400.jpg\",\"mimetype\":\"image/jpeg\",\"size\":21261,\"resolution\":{\"width\":400,\"height\":400},\"locale\":null,\"created\":\"2015-06-17T13:35:52.748+02:00\",\"modified\":\"2015-06-17T13:35:52.748+02:00\",\"assetID\":\"4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd\"},{\"url\":\"https://ec-datamanager-default-bucket.s3.amazonaws.com//home/www/datamanagerfiles/beef1234/rcf4bgN0mQWl35PuQ8w08SVh_512.jpg\",\"mimetype\":\"image/jpeg\",\"size\":20270,\"resolution\":{\"width\":288,\"height\":512},\"locale\":null,\"created\":\"2015-06-17T13:35:52.75+02:00\",\"modified\":\"2015-06-17T13:35:52.75+02:00\",\"assetID\":\"4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd\"},{\"url\":\"https://ec-datamanager-default-bucket.s3.amazonaws.com//home/www/datamanagerfiles/beef1234/rcf4bgN0mQWl35PuQ8w08SVh_200.jpg\",\"mimetype\":\"image/jpeg\",\"size\":8119,\"resolution\":{\"width\":200,\"height\":200},\"locale\":null,\"created\":\"2015-06-17T13:35:52.752+02:00\",\"modified\":\"2015-06-17T13:35:52.752+02:00\",\"assetID\":\"4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd\"},{\"url\":\"https://ec-datamanager-default-bucket.s3.amazonaws.com//home/www/datamanagerfiles/beef1234/rcf4bgN0mQWl35PuQ8w08SVh_100.jpg\",\"mimetype\":\"image/jpeg\",\"size\":3676,\"resolution\":{\"width\":100,\"height\":100},\"locale\":null,\"created\":\"2015-06-17T13:35:52.765+02:00\",\"modified\":\"2015-06-17T13:35:52.765+02:00\",\"assetID\":\"4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd\"}],\"tags\":[],\"title\":\"test\",\"type\":\"image\",\"_links\":{\"collection\":{\"href\":\"https://datamanager.angus.entrecode.de/asset/beef1234\"},\"ec:asset/best-file\":{\"href\":\"https://f.angus.entrecode.de/4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd\"},\"self\":{\"href\":\"https://datamanager.angus.entrecode.de/asset/beef1234?assetID=4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd\",\"title\":\"test\"},\"ec:api/asset/creator\":{\"href\":\"https://datamanager.angus.entrecode.de/api/beef1234/user?id=V1xSU1EqU\"}}},{\"assetID\":\"5cf8274a-4eec-4705-a187-096529e41b08\",\"created\":\"2015-06-17T11:34:45.101Z\",\"files\":[{\"url\":\"https://ec-datamanager-default-bucket.s3.amazonaws.com//home/www/datamanagerfiles/beef1234/BIoX8vgGr8RW6aU3Kol7RRyE.jpg\",\"mimetype\":\"image/jpeg\",\"size\":395285,\"resolution\":{\"width\":1080,\"height\":1920},\"locale\":null,\"created\":\"2015-06-17T13:34:45.013+02:00\",\"modified\":\"2015-06-17T13:34:45.013+02:00\",\"assetID\":\"5cf8274a-4eec-4705-a187-096529e41b08\"},{\"url\":\"https://ec-datamanager-default-bucket.s3.amazonaws.com//home/www/datamanagerfiles/beef1234/BIoX8vgGr8RW6aU3Kol7RRyE_400.jpg\",\"mimetype\":\"image/jpeg\",\"size\":21261,\"resolution\":{\"width\":400,\"height\":400},\"locale\":null,\"created\":\"2015-06-17T13:34:45.389+02:00\",\"modified\":\"2015-06-17T13:34:45.389+02:00\",\"assetID\":\"5cf8274a-4eec-4705-a187-096529e41b08\"},{\"url\":\"https://ec-datamanager-default-bucket.s3.amazonaws.com//home/www/datamanagerfiles/beef1234/BIoX8vgGr8RW6aU3Kol7RRyE_512.jpg\",\"mimetype\":\"image/jpeg\",\"size\":20270,\"resolution\":{\"width\":288,\"height\":512},\"locale\":null,\"created\":\"2015-06-17T13:34:45.4+02:00\",\"modified\":\"2015-06-17T13:34:45.4+02:00\",\"assetID\":\"5cf8274a-4eec-4705-a187-096529e41b08\"},{\"url\":\"https://ec-datamanager-default-bucket.s3.amazonaws.com//home/www/datamanagerfiles/beef1234/BIoX8vgGr8RW6aU3Kol7RRyE_256.jpg\",\"mimetype\":\"image/jpeg\",\"size\":7653,\"resolution\":{\"width\":144,\"height\":256},\"locale\":null,\"created\":\"2015-06-17T13:34:45.409+02:00\",\"modified\":\"2015-06-17T13:34:45.409+02:00\",\"assetID\":\"5cf8274a-4eec-4705-a187-096529e41b08\"},{\"url\":\"https://ec-datamanager-default-bucket.s3.amazonaws.com//home/www/datamanagerfiles/beef1234/BIoX8vgGr8RW6aU3Kol7RRyE_200.jpg\",\"mimetype\":\"image/jpeg\",\"size\":8119,\"resolution\":{\"width\":200,\"height\":200},\"locale\":null,\"created\":\"2015-06-17T13:34:45.413+02:00\",\"modified\":\"2015-06-17T13:34:45.413+02:00\",\"assetID\":\"5cf8274a-4eec-4705-a187-096529e41b08\"},{\"url\":\"https://ec-datamanager-default-bucket.s3.amazonaws.com//home/www/datamanagerfiles/beef1234/BIoX8vgGr8RW6aU3Kol7RRyE_1024.jpg\",\"mimetype\":\"image/jpeg\",\"size\":59724,\"resolution\":{\"width\":576,\"height\":1024},\"locale\":null,\"created\":\"2015-06-17T13:34:45.414+02:00\",\"modified\":\"2015-06-17T13:34:45.414+02:00\",\"assetID\":\"5cf8274a-4eec-4705-a187-096529e41b08\"},{\"url\":\"https://ec-datamanager-default-bucket.s3.amazonaws.com//home/www/datamanagerfiles/beef1234/BIoX8vgGr8RW6aU3Kol7RRyE_50.jpg\",\"mimetype\":\"image/jpeg\",\"size\":1992,\"resolution\":{\"width\":50,\"height\":50},\"locale\":null,\"created\":\"2015-06-17T13:34:45.418+02:00\",\"modified\":\"2015-06-17T13:34:45.418+02:00\",\"assetID\":\"5cf8274a-4eec-4705-a187-096529e41b08\"},{\"url\":\"https://ec-datamanager-default-bucket.s3.amazonaws.com//home/www/datamanagerfiles/beef1234/BIoX8vgGr8RW6aU3Kol7RRyE_100.jpg\",\"mimetype\":\"image/jpeg\",\"size\":3676,\"resolution\":{\"width\":100,\"height\":100},\"locale\":null,\"created\":\"2015-06-17T13:34:45.425+02:00\",\"modified\":\"2015-06-17T13:34:45.425+02:00\",\"assetID\":\"5cf8274a-4eec-4705-a187-096529e41b08\"}],\"tags\":[],\"title\":\"test\",\"type\":\"image\",\"_links\":{\"collection\":{\"href\":\"https://datamanager.angus.entrecode.de/asset/beef1234\"},\"ec:asset/best-file\":{\"href\":\"https://f.angus.entrecode.de/5cf8274a-4eec-4705-a187-096529e41b08\"},\"self\":{\"href\":\"https://datamanager.angus.entrecode.de/asset/beef1234?assetID=5cf8274a-4eec-4705-a187-096529e41b08\",\"title\":\"test\"},\"ec:api/asset/creator\":{\"href\":\"https://datamanager.angus.entrecode.de/api/beef1234/user?id=V1xSU1EqU\"}}}]}}");
                         case "/asset/beeffeed?size=10&page=1":
                             return new MockResponse().setResponseCode(200).setBody("{\"count\":0,\"total\":0,\"_links\":{\"curies\":{\"href\":\"https://angus.entrecode.de/doc/rel/{rel}\",\"templated\":true},\"ec:api/asset/by-id\":{\"href\":\"https://datamanager.angus.entrecode.de/asset/beef1234{?assetID}\",\"templated\":true},\"ec:api\":{\"href\":\"https://datamanager.angus.entrecode.de/api/beef1234\"},\"ec:assets/options\":{\"href\":\"https://datamanager.angus.entrecode.de/asset/beef1234{?assetID,created,createdFrom,createdTo,created~,creator,dataManagerID,page,size,sort,tag,title,title~,type,type~}\",\"templated\":true},\"self\":{\"href\":\"https://datamanager.angus.entrecode.de/asset/beef1234\"}}}");
-                        case "/4e430eb2-aaaa-4f76-9f68-b4b4bacdc7dd/url":
-                        case "/4e430eb2-aaaa-4f76-9f68-b4b4bacdc7dd/url?thumb=true&size=200":
+                        case "/asset/beef1234?size=10&page=1&type=image&title=hmq28Oy":
+                            return new MockResponse().setResponseCode(200).setBody("{\"count\":1,\"total\":1,\"_links\":{\"curies\":{\"href\":\"https://doc.entrecode.de/data_manager/#relation-{rel}\",\"templated\":true},\"ec:api/asset/by-id\":{\"href\":\"https://datamanager.entrecode.de/asset/beef1234{?assetID}\",\"templated\":true},\"ec:api/tags\":{\"href\":\"https://datamanager.entrecode.de/tag/beef1234\"},\"ec:api\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234\"},\"ec:assets/options\":{\"href\":\"https://datamanager.entrecode.de/asset/beef1234{?assetID,created,createdFrom,createdTo,created~,creator,dataManagerID,page,size,sort,tag,title,title~,type,type~}\",\"templated\":true},\"self\":{\"href\":\"https://datamanager.entrecode.de/asset/beef1234?size=5&page=1&type=image&title=hmq28Oy\"}},\"_embedded\":{\"ec:api/asset\":{\"assetID\":\"b05e55b0-a8e7-4ed6-8cba-e6162acd53e5\",\"created\":\"2015-03-23T10:01:51.932Z\",\"files\":[{\"url\":\"https://cdn2.entrecode.de/files/f84710b8/Y_umVoua251o8jdqLPfQEOhB_512.jpg\",\"mimetype\":\"image/jpeg\",\"size\":30334,\"resolution\":{\"width\":384,\"height\":512},\"locale\":null,\"created\":\"2015-03-23T10:02:14.773+00:00\",\"modified\":\"2015-03-23T10:02:14.773+00:00\",\"assetID\":\"b05e55b0-a8e7-4ed6-8cba-e6162acd53e5\"},{\"url\":\"https://cdn2.entrecode.de/files/f84710b8/Y_umVoua251o8jdqLPfQEOhB.jpg\",\"mimetype\":\"image/jpeg\",\"size\":79407,\"resolution\":{\"width\":490,\"height\":653},\"locale\":null,\"created\":\"2015-03-23T10:02:14.63+00:00\",\"modified\":\"2015-03-23T10:02:14.63+00:00\",\"assetID\":\"b05e55b0-a8e7-4ed6-8cba-e6162acd53e5\"},{\"url\":\"https://cdn2.entrecode.de/files/f84710b8/Y_umVoua251o8jdqLPfQEOhB_256.jpg\",\"mimetype\":\"image/jpeg\",\"size\":10459,\"resolution\":{\"width\":192,\"height\":256},\"locale\":null,\"created\":\"2015-03-23T10:02:14.773+00:00\",\"modified\":\"2015-03-23T10:02:14.773+00:00\",\"assetID\":\"b05e55b0-a8e7-4ed6-8cba-e6162acd53e5\"},{\"url\":\"https://cdn2.entrecode.de/files/f84710b8/Y_umVoua251o8jdqLPfQEOhB_50.jpg\",\"mimetype\":\"image/jpeg\",\"size\":1359,\"resolution\":{\"width\":50,\"height\":50},\"locale\":null,\"created\":\"2015-03-23T10:02:14.787+00:00\",\"modified\":\"2015-03-23T10:02:14.787+00:00\",\"assetID\":\"b05e55b0-a8e7-4ed6-8cba-e6162acd53e5\"},{\"url\":\"https://cdn2.entrecode.de/files/f84710b8/Y_umVoua251o8jdqLPfQEOhB_400.jpg\",\"mimetype\":\"image/jpeg\",\"size\":23217,\"resolution\":{\"width\":400,\"height\":400},\"locale\":null,\"created\":\"2015-03-23T10:02:14.774+00:00\",\"modified\":\"2015-03-23T10:02:14.774+00:00\",\"assetID\":\"b05e55b0-a8e7-4ed6-8cba-e6162acd53e5\"},{\"url\":\"https://cdn2.entrecode.de/files/f84710b8/Y_umVoua251o8jdqLPfQEOhB_200.jpg\",\"mimetype\":\"image/jpeg\",\"size\":7839,\"resolution\":{\"width\":200,\"height\":200},\"locale\":null,\"created\":\"2015-03-23T10:02:14.772+00:00\",\"modified\":\"2015-03-23T10:02:14.772+00:00\",\"assetID\":\"b05e55b0-a8e7-4ed6-8cba-e6162acd53e5\"},{\"url\":\"https://cdn2.entrecode.de/files/f84710b8/Y_umVoua251o8jdqLPfQEOhB_100.jpg\",\"mimetype\":\"image/jpeg\",\"size\":2989,\"resolution\":{\"width\":100,\"height\":100},\"locale\":null,\"created\":\"2015-03-23T10:02:14.773+00:00\",\"modified\":\"2015-03-23T10:02:14.773+00:00\",\"assetID\":\"b05e55b0-a8e7-4ed6-8cba-e6162acd53e5\"}],\"tags\":[],\"title\":\"hmq28Oy\",\"type\":\"image\",\"_links\":{\"collection\":{\"href\":\"https://datamanager.entrecode.de/asset/beef1234\"},\"ec:asset/best-file\":{\"href\":\"https://datamanager.entrecode.de/files/b05e55b0-a8e7-4ed6-8cba-e6162acd53e5\"},\"self\":{\"href\":\"https://datamanager.entrecode.de/asset/beef1234?assetID=b05e55b0-a8e7-4ed6-8cba-e6162acd53e5\",\"title\":\"hmq28Oy\"}}}}}");
+                        case "/files/4e430eb2-aaaa-4f76-9f68-b4b4bacdc7dd/url":
+                        case "/files/4e430eb2-aaaa-4f76-9f68-b4b4bacdc7dd/url?thumb=true&size=200":
                             return new MockResponse().setResponseCode(404);
-                        case "/4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd/url?thumb=true&size=50":
-                        case "/4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd/url?thumb=true&size=100":
-                        case "/4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd/url?thumb=true&size=200":
-                        case "/4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd/url?thumb=true&size=400":
+                        case "/files/4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd/url?thumb=true&size=50":
+                        case "/files/4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd/url?thumb=true&size=100":
+                        case "/files/4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd/url?thumb=true&size=200":
+                        case "/files/4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd/url?thumb=true&size=400":
                             return new MockResponse().setResponseCode(200).setBody("{\"url\":\"https://ec-datamanager-default-bucket.s3.amazonaws.com//home/www/datamanagerfiles/c024f209/rcf4bgN0mQWl35PuQ8w08SVh_200.jpg\"}");
-                        case "/4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd/url?size=200":
+                        case "/files/4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd/url?size=200":
                             return new MockResponse().setResponseCode(200).setBody("{\"url\":\"https://ec-datamanager-default-bucket.s3.amazonaws.com//home/www/datamanagerfiles/c024f209/rcf4bgN0mQWl35PuQ8w08SVh_256.jpg\"}");
-                        case "/4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd/url":
-                        case "/4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd/url?thumb=false":
+                        case "/files/4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd/url":
+                        case "/files/4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd/url?thumb=false":
                             return new MockResponse().setResponseCode(200).setBody("{\"url\":\"https://ec-datamanager-default-bucket.s3.amazonaws.com//home/www/datamanagerfiles/c024f209/rcf4bgN0mQWl35PuQ8w08SVh.jpg\"}");
                         case "/api/beef1234/to-do-item-single?size=10&page=1":
                             return new MockResponse().setResponseCode(200).setBody("{\"count\":1,\"total\":1,\"_links\":{\"collection\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234\"},\"curies\":{\"name\":\"beef1234\",\"href\":\"https://datamanager.entrecode.de/api/doc/beef1234/{rel}\",\"templated\":true},\"self\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/to-do-item-single\"},\"beef1234:to-do-item-single/options\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/to-do-item{?created,createdFrom,createdTo,done,id,modified,modifiedFrom,modifiedTo,page,private,size,sort,todo-text,todo-text~}\",\"templated\":true}},\"_embedded\":{\"beef1234:to-do-item-single\":{\"id\":\"VJY4n7vcI\",\"created\":\"2015-06-17T13:22:27.404Z\",\"modified\":\"2015-06-17T13:22:27.404Z\",\"private\":false,\"done\":false,\"todo-text\":\"Test text\",\"_links\":{\"collection\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/to-do-item-single\"},\"self\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/to-do-item-single?id=VJY4n7vcI\"},\"beef1234:to-do-item/creator\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/user?id=QkHCflm2\"}}}}}");
@@ -70,13 +79,13 @@ public class DataManagerTest {
                         case "/api/beef1234/to-do-item-none?size=10&page=1":
                             return new MockResponse().setResponseCode(200).setBody("{\"count\":0,\"total\":0,\"_links\":{\"collection\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234\"},\"curies\":{\"name\":\"beef1234\",\"href\":\"https://datamanager.entrecode.de/api/doc/beef1234/{rel}\",\"templated\":true},\"self\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/to-do-item-none\"},\"beef1234:to-do-item-none/options\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/to-do-item-none{?created,createdFrom,createdTo,done,id,modified,modifiedFrom,modifiedTo,page,private,size,sort,todo-text,todo-text~}\",\"templated\":true}}}");
                         case "/api/beef1234/to-do-item?id=VJY4n7vcI":
-                            return new MockResponse().setResponseCode(200).setBody("{\"count\":1,\"total\":1,\"_links\":{\"collection\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234\"},\"curies\":{\"name\":\"beef1234\",\"href\":\"https://datamanager.entrecode.de/api/doc/beef1234/{rel}\",\"templated\":true},\"self\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/to-do-item?id=VJY4n7vcI\"},\"beef1234:to-do-item/options\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/to-do-item{?created,createdFrom,createdTo,done,id,modified,modifiedFrom,modifiedTo,page,private,size,sort,todo-text,todo-text~}\",\"templated\":true}},\"_embedded\":{\"beef1234:to-do-item\":{\"id\":\"VJY4n7vcI\",\"created\":\"2015-06-17T13:22:27.404Z\",\"modified\":\"2015-06-17T13:22:27.404Z\",\"private\":false,\"done\":false,\"todo-text\":\"Test text\",\"_links\":{\"collection\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/to-do-item\"},\"self\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/to-do-item?id=VJY4n7vcI\"},\"beef1234:to-do-item/creator\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/user?id=QkHCflm2\"}}}}}");
+                            return new MockResponse().setResponseCode(200).setBody("{\"id\":\"VJY4n7vcI\",\"created\":\"2015-06-17T13:22:27.404Z\",\"modified\":\"2015-06-17T13:22:27.404Z\",\"private\":false,\"done\":false,\"integer\":1,\"decimal\":2.5,\"todo-text\":\"Test text\",\"json\":{\"some\":\"json\"},\"_links\":{\"collection\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/to-do-item\"},\"self\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/to-do-item?id=VJY4n7vcI\"},\"beef1234:to-do-item/creator\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/user?id=QkHCflm2\"}}}");
                         // DM with 2 models
                         case "/api/beef1234/":
-                            return new MockResponse().setResponseCode(200).setBody("{\"dataManagerID\":\"a50ae357-91b5-4d56-ba0e-7ec476f6c07d\",\"_links\":{\"curies\":{\"name\":\"beef1234\",\"href\":\"https://datamanager.entrecode.de/api/doc/beef1234/relation/{rel}\",\"templated\":true},\"beef1234:to-do-item\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/to-do-item\",\"name\":\"to-do-item list\"},\"beef1234:user\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/user\",\"name\":\"user list\"},\"ec:api/assets\":{\"href\":\"https://datamanager.entrecode.de/asset/beef1234\"}}}");
+                            return new MockResponse().setResponseCode(200).setBody("{\"_links\":{\"curies\":{\"name\":\"beef1234\",\"href\":\"https://datamanager.entrecode.de/api/doc/f84710b8/relation/{rel}\",\"templated\":true}},\"_embedded\":{\"beef1234:to-do-item\":{\"hexColor\":\"#abcdef\",\"titleField\":\"to-do-text\",\"_links\":{\"self\":{\"href\":\"https://datamanager.entrecode.de/api/f84710b8/to-do-item\"}}},\"beef1234:user\":{\"hexColor\":\"#abcdef\",\"titleField\":\"id\",\"_links\":{\"self\":{\"href\":\"https://datamanager.entrecode.de/api/f84710b8/user\"}}}}}");
                         // DM with user model
                         case "/api/beefbeef/":
-                            return new MockResponse().setResponseCode(200).setBody("{\"dataManagerID\":\"a50ae357-91b5-4d56-ba0e-7ec476f6c07d\",\"_links\":{\"curies\":{\"name\":\"beefbeef\",\"href\":\"https://datamanager.entrecode.de/api/doc/beefbeef/relation/{rel}\",\"templated\":true},\"beefbeef:user\":{\"href\":\"https://datamanager.entrecode.de/api/beefbeef/user\",\"name\":\"user list\"},\"ec:api/assets\":{\"href\":\"https://datamanager.entrecode.de/asset/beefbeef\"}}}");
+                            return new MockResponse().setResponseCode(200).setBody("{\"_links\":{\"curies\":{\"name\":\"beef1234\",\"href\":\"https://datamanager.entrecode.de/api/doc/f84710b8/relation/{rel}\",\"templated\":true}},\"_embedded\":{\"beef1234:user\":{\"hexColor\":\"#abcdef\",\"titleField\":\"id\",\"_links\":{\"self\":{\"href\":\"https://datamanager.entrecode.de/api/f84710b8/user\"}}}}}");
                         case "/api/schema/beef1234/to-do-item?template=get":
                         case "/api/schema/beef1234/to-do-item?template=put":
                         case "/api/schema/beef1234/to-do-item?template=post":
@@ -89,9 +98,11 @@ public class DataManagerTest {
                         case "/api/schema/beef1234/nonexistent?template=get":
                         case "/api/beefbeef/user?id=VJY4n7vcl":
                         case "/asset/feedbeef?size=10&page=1":
-                            return new MockResponse().setResponseCode(404).setBody("{\"status\":404,\"code\":2100,\"title\":\"Resource not found\",\"type\":\"https://entrecode.de/doc/error/2100\",\"_links\":{\"up\":{\"title\":\"Data Manager Home Page\",\"href\":\"https://datamanager.entrecode.de\"},\"describedby\":{\"title\":\"Error Description\",\"href\":\"https://entrecode.de/doc/error/2100\"}},\"detail\":\"\",\"verbose\":\"\"}");
+                            return new MockResponse().setResponseCode(404).setBody("{\"status\":404,\"code\":2100,\"title\":\"Resource not found\",\"type\":\"https://entrecode.de/doc/error/2100\",\"_links\":{\"up\":{\"title\":\"Data Manager Home Page\",\"href\":\"https://datamanager.entrecode.de\"},\"describedby\":{\"title\":\"Error Description\",\"href\":\"https://entrecode.de/doc/error/2100\"}},\"detail\":\"some detail\",\"verbose\":\"some verbose info\"}");
                         case "/api/beef1234/to-do-item?id=AAAAAAAA":
                         case "/asset/beef1234?assetID=555ebdc3-fb84-42ba-b381-3345fb6f6132":
+                        case "/tag/beef1234?tag=nonexistant":
+                            // tag does not exist
                             return new MockResponse().setResponseCode(404).setBody("{\"status\":404,\"code\":2102,\"title\":\"No resource entity matching query string filter found\",\"type\":\"https://entrecode.de/doc/error/2102\",\"_links\":{\"up\":{\"title\":\"Data Manager Home Page\",\"href\":\"https://datamanager.entrecode.de\"},\"describedby\":{\"title\":\"Error Description\",\"href\":\"https://entrecode.de/doc/error/2102\"}},\"detail\":\"\",\"verbose\":\"\"}");
                         default:
                             throw new RuntimeException("Not Mocked: " + request);
@@ -99,11 +110,13 @@ public class DataManagerTest {
                 case "PUT":
                     switch (request.getPath()) {
                         case "/api/beef1234/to-do-item?id=VJY4n7vcI":
-                            return new MockResponse().setResponseCode(200).setBody("{\"count\":1,\"total\":1,\"_links\":{\"collection\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234\"},\"curies\":{\"name\":\"beef1234\",\"href\":\"https://datamanager.entrecode.de/api/doc/beef1234/{rel}\",\"templated\":true},\"self\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/to-do-item?id=VJY4n7vcI\"},\"beef1234:to-do-item/options\":{\"href\":\"https://datamanager.entrecode.de/api/f84710b8/to-do-item{?created,createdFrom,createdTo,done,id,modified,modifiedFrom,modifiedTo,page,private,size,sort,todo-text,todo-text~}\",\"templated\":true}},\"_embedded\":{\"beef1234:to-do-item\":{\"id\":\"VJY4n7vcI\",\"created\":\"2015-06-17T13:22:27.404Z\",\"modified\":\"2015-06-25T12:41:14.929Z\",\"private\":false,\"done\":true,\"todo-text\":\"Test text\",\"_links\":{\"collection\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/to-do-item\"},\"self\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/to-do-item?id=VJY4n7vcI\"},\"f84710b8:to-do-item/creator\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/user?id=QkHCflm2\"}}}}}");
+                            return new MockResponse().setResponseCode(200).setBody("{\"id\":\"VJY4n7vcI\",\"created\":\"2015-06-17T13:22:27.404Z\",\"modified\":\"2015-06-25T12:41:14.929Z\",\"private\":false,\"done\":true,\"todo-text\":\"Test text\",\"_links\":{\"collection\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/to-do-item\"},\"self\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/to-do-item?id=VJY4n7vcI\"},\"f84710b8:to-do-item/creator\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/user?id=QkHCflm2\"}}}");
                         case "/api/beef1234/to-do-item?id=VJY4n7vcA":
                             return new MockResponse().setResponseCode(400).setBody("{\"status\":400,\"code\":2211,\"title\":\"Invalid format for property in JSON body\",\"type\":\"https://entrecode.de/doc/error/2211\",\"_links\":{\"up\":{\"title\":\"Data Manager Home Page\",\"href\":\"https://datamanager.entrecode.de\"},\"describedby\":{\"title\":\"Error Description\",\"href\":\"https://entrecode.de/doc/error/2211\"}},\"detail\":\"Invalid type: string (expected boolean/null)\",\"verbose\":\"/done\"}");
                         case "/api/beef1234/to-do-item?id=VJY4n7vcZ":
                             return new MockResponse().setResponseCode(404).setBody("{\"status\":404,\"code\":2102,\"title\":\"No resource entity matching query string filter found\",\"type\":\"https://entrecode.de/doc/error/2102\",\"_links\":{\"up\":{\"title\":\"Data Manager Home Page\",\"href\":\"https://datamanager.entrecode.de\"},\"describedby\":{\"title\":\"Error Description\",\"href\":\"https://entrecode.de/doc/error/2102\"}},\"detail\":\"\",\"verbose\":\"\"}");
+                        case "/tag/beef1234?tag=achja":
+                            return new MockResponse().setResponseCode(200).setBody("{\"count\":1,\"tag\":\"ohjah2\",\"_links\":{\"collection\":{\"href\":\"https://datamanager.entrecode.de/tag?dataManagerID=a50ae357-91b5-4d56-ba0e-7ec476f6c07d\"},\"ec:assets/with-tag\":{\"href\":\"https://datamanager.entrecode.de/asset?dataManagerID=a50ae357-91b5-4d56-ba0e-7ec476f6c07d&tag=achja\"},\"ec:datamanager\":{\"href\":\"https://datamanager.entrecode.de/?dataManagerID=a50ae357-91b5-4d56-ba0e-7ec476f6c07d\"},\"self\":{\"href\":\"https://datamanager.entrecode.de/tag?dataManagerID=a50ae357-91b5-4d56-ba0e-7ec476f6c07d&tag=ohjah2\"},\"curies\":{\"href\":\"https://doc.entrecode.de/data_manager/#relation-{rel}\",\"templated\":true}}}");
                         default:
                             throw new RuntimeException("Not Mocked: " + request);
                     }
@@ -116,9 +129,9 @@ public class DataManagerTest {
                         case "/asset/beefbeef":
                             return new MockResponse().setResponseCode(201).setBody("{\"count\":2,\"total\":2,\"_links\":{\"ec:asset\":[{\"href\":\"https://datamanager.angus.entrecode.de/asset/beefbeef?assetID=681923d1-07a3-4c29-9c09-ea88ae8eaca3\",\"title\":\"icon\"},{\"href\":\"https://datamanager.angus.entrecode.de/asset/beefbeef?assetID=d56cfd24-d38f-41f1-a226-9c49b813c582\",\"title\":\"logo\"}]}}");
                         case "/api/beef1234/user":
-                            return new MockResponse().setResponseCode(201).setBody("{\"count\":1,\"total\":1,\"_links\":{\"collection\":{\"href\":\"https://datamanager.entrecode.de/api/f84710b8\"},\"curies\":{\"name\":\"f84710b8\",\"href\":\"https://datamanager.entrecode.de/api/doc/f84710b8/{rel}\",\"templated\":true},\"self\":{\"href\":\"https://datamanager.entrecode.de/api/f84710b8/user\"},\"f84710b8:user/options\":{\"href\":\"https://datamanager.entrecode.de/api/f84710b8/user{?created,createdFrom,createdTo,id,modified,modifiedFrom,modifiedTo,page,private,size,sort,temporaryToken,temporaryToken~}\",\"templated\":true}},\"_embedded\":{\"f84710b8:user\":{\"id\":\"EkWjwR8zv\",\"created\":\"2015-06-23T14:38:03.102Z\",\"modified\":\"2015-06-23T14:38:03.102Z\",\"private\":true,\"temporaryToken\":\"5c4ad68e-d03e-4476-92b3-1f0ae06c162e\",\"_links\":{\"collection\":{\"href\":\"https://datamanager.entrecode.de/api/f84710b8/user\"},\"self\":{\"href\":\"https://datamanager.entrecode.de/api/f84710b8/user?id=EkWjwR8zv\"},\"f84710b8:user/creator\":{\"href\":\"https://datamanager.entrecode.de/api/f84710b8/user?id=EkWjwR8zv\"}}}}}");
+                            return new MockResponse().setResponseCode(201).setBody("{\"id\":\"EkWjwR8zv\",\"created\":\"2015-06-23T14:38:03.102Z\",\"modified\":\"2015-06-23T14:38:03.102Z\",\"private\":true,\"temporaryToken\":\"5c4ad68e-d03e-4476-92b3-1f0ae06c162e\",\"_links\":{\"collection\":{\"href\":\"https://datamanager.entrecode.de/api/f84710b8/user\"},\"self\":{\"href\":\"https://datamanager.entrecode.de/api/f84710b8/user?id=EkWjwR8zv\"},\"f84710b8:user/creator\":{\"href\":\"https://datamanager.entrecode.de/api/f84710b8/user?id=EkWjwR8zv\"}}}");
                         case "/api/beef1234/to-do-item":
-                            return new MockResponse().setResponseCode(201).setBody("{\"count\":1,\"total\":1,\"_links\":{\"collection\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234\"},\"curies\":{\"name\":\"beef1234\",\"href\":\"https://datamanager.entrecode.de/api/doc/beef1234/{rel}\",\"templated\":true},\"self\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/to-do-item?id=VJY4n7vcZ\"},\"beef1234:to-do-item/options\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/to-do-item{?created,createdFrom,createdTo,done,id,modified,modifiedFrom,modifiedTo,page,private,size,sort,todo-text,todo-text~}\",\"templated\":true}},\"_embedded\":{\"beef1234:to-do-item\":{\"id\":\"NyxdCs1rw\",\"created\":\"2015-06-25T13:06:00.056Z\",\"modified\":\"2015-06-25T13:06:00.056Z\",\"private\":false,\"done\":false,\"todo-text\":\"Test text\",\"_links\":{\"collection\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/to-do-item\"},\"self\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/to-do-item?id=NyxdCs1rw\"},\"beef1234:to-do-item/creator\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/user?id=QkHCflm2\"}}}}}");
+                            return new MockResponse().setResponseCode(201).setBody("{\"id\":\"NyxdCs1rw\",\"created\":\"2015-06-25T13:06:00.056Z\",\"modified\":\"2015-06-25T13:06:00.056Z\",\"private\":false,\"done\":false,\"todo-text\":\"Test text\",\"_links\":{\"collection\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/to-do-item\"},\"self\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/to-do-item?id=NyxdCs1rw\"},\"beef1234:to-do-item/creator\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/user?id=QkHCflm2\"}}}");
                         case "/api/beef1234/to-do-item-fail":
                             return new MockResponse().setResponseCode(400).setBody("{\"status\":400,\"code\":2211,\"title\":\"Invalid format for property in JSON body\",\"type\":\"https://entrecode.de/doc/error/2211\",\"_links\":{\"up\":{\"title\":\"Data Manager Home Page\",\"href\":\"https://datamanager.entrecode.de\"},\"describedby\":{\"title\":\"Error Description\",\"href\":\"https://entrecode.de/doc/error/2211\"}},\"detail\":\"Invalid type: string (expected boolean/null)\",\"verbose\":\"/done\"}");
                         case "/api/beef1234/doesnotexist":
@@ -130,6 +143,7 @@ public class DataManagerTest {
                     }
                 case "DELETE":
                     switch (request.getPath()) {
+                        case "/tag/beef1234?tag=achja":
                         case "/api/beef1234/to-do-item?id=VJY4n7vcI":
                         case "/asset/beef1234assetID=555ebdc3-fb84-42ba-b381-3345fb6f6132":
                         case "/asset/beef1234assetID=555ebdc3-aaaa-42ba-b381-3345fb6f6132":
@@ -155,6 +169,7 @@ public class DataManagerTest {
     public void after() throws IOException {
         server.shutdown();
     }
+
 
     @Test(expected = ECMalformedDataManagerIDException.class)
     public void dmMalformedID() throws ECMalformedDataManagerIDException {
@@ -228,9 +243,19 @@ public class DataManagerTest {
     }
 
     @Test
-    public void dmIDRegister() throws Exception {
+    public void dmURLRegister() throws Exception {
         final DataManager[] dm = new DataManager[1];
         DataManager.create(baseUrl, dataManager -> dm[0] = dataManager, e -> fail(e.stringify()));
+
+        await().until(() -> dm[0] != null);
+        assertTrue(dm[0].getToken() != null);
+        assertTrue(!dm[0].getReadOnly());
+    }
+
+    @Test
+    public void dmIDRegister() throws Exception {
+        final DataManager[] dm = new DataManager[1];
+        DataManager.create("f84710b8", dataManager -> dm[0] = dataManager, e -> fail(e.stringify()));
 
         await().until(() -> dm[0] != null);
         assertTrue(dm[0].getToken() != null);
@@ -271,6 +296,9 @@ public class DataManagerTest {
         await().until(() -> models[0] != null);
         assertTrue(models[0].get(0) instanceof Model);
         assertEquals(1, models[0].size());
+        Model m = (Model) models[0].get(0);
+        assertEquals("#abcdef", m.getHexColor());
+        assertEquals("id", m.getTitleField());
     }
 
     @Test
@@ -295,8 +323,10 @@ public class DataManagerTest {
 
         await().until(() -> entries[0] != null);
         assertEquals(entries[0].getCount(), 10);
-        assertTrue(entries[0].getEmbedded().get(0) instanceof ECEntry);
+        assertTrue(entries[0].getAuthHeaderValue() != null);
+        assertTrue(entries[0].getLinks() != null);
         assertEquals(entries[0].getEmbedded().size(), 10);
+        assertTrue(entries[0].getEmbedded().get(0) instanceof ECEntry);
     }
 
     @Test
@@ -356,6 +386,29 @@ public class DataManagerTest {
 
         await().until(() -> entry[0] != null);
         assertEquals("VJY4n7vcI", entry[0].get("id"));
+        assertEquals("2015-06-17T13:22:27.404Z", entry[0].get("created"));
+        assertEquals("2015-06-17T13:22:27.404Z", entry[0].get("modified"));
+        assertEquals(false, entry[0].get("private"));
+        assertEquals(false, entry[0].get("isPrivate"));
+        assertEquals("Test text", entry[0].get("todo-text"));
+        assertEquals(false, entry[0].get("done"));
+    }
+
+    @Test
+    public void entrySetMandatoryFieldsDoesNothing() throws IOException {
+        final ECEntry[] entry = new ECEntry[1];
+        DataManager dm = new DataManager(baseUrl, UUID.fromString("5c4ad68e-d03e-4476-92b3-1f0ae06c162e"));
+        dm.model("to-do-item").entry("VJY4n7vcI").onResponse(e -> entry[0] = e).onError(e -> fail(e.stringify())).go();
+
+        await().until(() -> entry[0] != null);
+        entry[0].set("id", "doesNothing");
+        entry[0].set("created", "doesNothing");
+        entry[0].set("modified", "doesNothing");
+        assertEquals("VJY4n7vcI", entry[0].get("id"));
+        assertEquals("2015-06-17T13:22:27.404Z", entry[0].get("created"));
+        assertEquals("2015-06-17T13:22:27.404Z", entry[0].get("modified"));
+        assertEquals(false, entry[0].get("private"));
+        assertEquals(false, entry[0].get("isPrivate"));
         assertEquals("Test text", entry[0].get("todo-text"));
         assertEquals(false, entry[0].get("done"));
     }
@@ -786,6 +839,18 @@ public class DataManagerTest {
     }
 
     @Test
+    public void assetsMultipleWithPagination() throws IOException {
+        DataManager dm = new DataManager(server.getUrl("/api/beefbeef"), true);
+        final ECList[] assets = new ECList[1];
+        dm.assets().pageSize(2).page(1).onResponse(r -> assets[0] = (ECList) r).onError(e -> fail(e.stringify())).go();
+
+        await().until(() -> assets[0] != null);
+        assertEquals(2, assets[0].getCount());
+        assertEquals(2, assets[0].getTotal());
+        assertTrue(assets[0].getEmbedded().get(1) instanceof ECAsset);
+    }
+
+    @Test
     public void assetsOneDMReadOnly() throws IOException {
         DataManager dm = new DataManager(baseUrl, true);
         final ECList[] assets = new ECList[1];
@@ -802,6 +867,21 @@ public class DataManagerTest {
         DataManager dm = new DataManager(baseUrl, UUID.randomUUID());
         final ECList[] assets = new ECList[1];
         dm.assets().onResponse(r -> assets[0] = r).onError(e -> fail(e.stringify())).go();
+
+        await().until(() -> assets[0] != null);
+        assertEquals(1, assets[0].getCount());
+        assertEquals(1, assets[0].getTotal());
+        assertTrue(assets[0].getEmbedded().get(0) instanceof ECAsset);
+    }
+
+    @Test
+    public void assetsOneWithFilter() throws IOException {
+        DataManager dm = new DataManager(baseUrl, UUID.randomUUID());
+        final ECList[] assets = new ECList[1];
+        dm.assets().filter(new HashMap<String, String>() {{
+            put("type", "image");
+            put("title", "hmq28Oy");
+        }}).onResponse(r -> assets[0] = (ECList) r).onError(e -> fail(e.stringify())).go();
 
         await().until(() -> assets[0] != null);
         assertEquals(1, assets[0].getCount());
@@ -829,6 +909,9 @@ public class DataManagerTest {
         await().until(() -> error[0] != null);
         assertEquals(404, error[0].getStatus());
         assertEquals(2100, error[0].getCode());
+        assertTrue(error[0].stringify() != null);
+        assertTrue(error[0].getEmbedded() == null);
+        assertTrue(error[0].getLinks() != null);
     }
 
     @Test
@@ -839,6 +922,11 @@ public class DataManagerTest {
 
         await().until(() -> asset[0] != null);
         assertEquals("4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd", asset[0].getAssetID());
+        assertEquals("test", asset[0].getTitle());
+        assertEquals("image", asset[0].getType());
+        assertEquals("2015-06-17T11:35:52.560Z", asset[0].getCreated());
+        assertTrue(asset[0].getFiles() != null);
+        assertTrue(asset[0].getTags() != null);
     }
 
     @Test
@@ -948,7 +1036,7 @@ public class DataManagerTest {
         dm.createAsset(new ArrayList<File>() {{
             add(file);
             add(file);
-        }}).onResponse(r ->fail()).onError(e -> fail(e.stringify())).go();
+        }}).onResponse(r -> fail()).onError(e -> fail(e.stringify())).go();
     }
 
     @Test
@@ -975,8 +1063,107 @@ public class DataManagerTest {
         dm.createAsset(file).onResponse(r -> fail()).onError(e -> fail(e.stringify())).go();
     }
 
-    // TODO pagination (size, page)
-    // TODO filter (allowed, not allowed)
-    // TODO filter (to, from)
-    // TODO filter (like/search)
+    @Test
+    public void tagsMultiple() {
+        final ECList[] tags = new ECList[1];
+        DataManager dm = new DataManager(server.getUrl("/api/beef1234"), UUID.randomUUID());
+        dm.tags().onResponse(r -> tags[0] = r).onError(e -> fail(e.stringify())).go();
+
+        await().until(() -> tags[0] != null);
+        assertEquals(tags[0].getCount(), 2);
+        assertTrue(tags[0].getLinks() != null);
+        assertEquals(tags[0].getEmbedded().size(), 2);
+        assertTrue(tags[0].getEmbedded().get(0) instanceof ECTag);
+    }
+
+    @Test
+    public void tagOne() {
+        final ECList[] tags = new ECList[1];
+        DataManager dm = new DataManager(server.getUrl("/api/beefbeef"), true);
+        dm.tags().onResponse(r -> tags[0] = r).onError(e -> fail(e.stringify())).go();
+
+        await().until(() -> tags[0] != null);
+        assertEquals(1, tags[0].getCount());
+        assertTrue(tags[0].getEmbedded().get(0) instanceof ECTag);
+        assertEquals(1, tags[0].getEmbedded().size());
+    }
+
+    @Test
+    public void tagNone() {
+        DataManager dm = new DataManager(server.getUrl("/api/beeffeed"), true);
+        final ECList[] tags = new ECList[1];
+        dm.tags().onResponse(r -> tags[0] = r).onError(e -> fail(e.stringify())).go();
+
+        await().until(() -> tags[0] != null);
+        assertEquals(0, tags[0].getCount());
+        assertEquals(0, tags[0].getTotal());
+    }
+
+    @Test
+    public void tagExistingReadOnlyDM() {
+        final ECTag[] tag = new ECTag[1];
+        DataManager dm = new DataManager(baseUrl, true);
+        dm.tag("achja").onResponse(r -> tag[0] = r).onError(e -> fail(e.stringify())).go();
+
+        await().until(() -> tag[0] != null);
+        assertEquals("achja", tag[0].getTag());
+        assertEquals(1, tag[0].getCount());
+        assertTrue(tag[0].getLinks() != null);
+    }
+
+    @Test
+    public void tagNonexistant() {
+        final ECError[] error = new ECError[1];
+        DataManager dm = new DataManager(baseUrl, true);
+        dm.tag("nonexistant").onResponse(r -> fail()).onError(e -> error[0] = e).go();
+
+        await().until(() -> error[0] != null);
+        assertEquals(404, error[0].getStatus());
+        assertEquals(2102, error[0].getCode());
+    }
+
+    @Test
+    public void tagSave() {
+        final ECTag[] tag = new ECTag[1];
+        DataManager dm = new DataManager(baseUrl, UUID.fromString("5c4ad68e-d03e-4476-92b3-1f0ae06c162e"));
+        dm.tag("achja").onResponse(t -> {
+            JsonObject links = t.getLinks();
+            JsonObject self = links.get("self").getAsJsonObject();
+            self.addProperty("href", dm.getTagUrl() + "?tag=achja");
+            links.add("self", self);
+            t.setLinks(links);
+            t.setTag("ohjah2");
+            t.save().onResponse(r -> tag[0] = r).onError(e2 -> fail(e2.stringify())).go();
+        }).onError(e -> fail(e.stringify())).go();
+        await().until(() -> tag[0] != null);
+        assertEquals("ohjah2", tag[0].getTag());
+    }
+
+    @Test
+    public void tagDelete() {
+        final boolean[] response = new boolean[1];
+        DataManager dm = new DataManager(baseUrl, UUID.fromString("5c4ad68e-d03e-4476-92b3-1f0ae06c162e"));
+        dm.tag("achja").onResponse(t -> {
+            JsonObject links = t.getLinks();
+            JsonObject self = links.get("self").getAsJsonObject();
+            self.addProperty("href", dm.getTagUrl() + "?tag=achja");
+            links.add("self", self);
+            t.setLinks(links);
+            t.delete().onResponse(r -> response[0] = r).onError(e2 -> fail(e2.stringify())).go();
+        }).onError(e -> fail(e.stringify())).go();
+        await().until(() -> response[0]);
+        assertTrue(response[0]);
+    }
+
+    @Test(expected = ECDataMangerInReadOnlyModeException.class)
+    public void tagSaveOnReadOnlyDM() {
+        final ECTag tag = new ECTag();
+        tag.save().onResponse(r -> fail()).onError(e2 -> fail(e2.stringify())).go();
+    }
+
+    @Test(expected = ECDataMangerInReadOnlyModeException.class)
+    public void tagDeleteOnReadOnlyDM() {
+        final ECTag tag = new ECTag();
+        tag.delete().onResponse(t -> fail()).onError(e -> fail(e.stringify())).go();
+    }
 }
