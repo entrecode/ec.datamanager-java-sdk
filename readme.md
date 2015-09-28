@@ -103,6 +103,7 @@ DataManager dm2 = new DataManager(
 
 ```java
 dm.model("myModel").entries()
+	.levels(2)
     .onResponse(new ECResponseListener<List<ECEntry>>{
 		@Override
 		public void onResponse(List<ECEntry> entries){
@@ -127,6 +128,7 @@ dm.model("myModel").entries()
 ### Get Entry
 ```java
 dm.model("myModel").entry("alwoigei")
+	.levels(2)
 	.onResponse(new ECResponseListener<ECEntry>{
 		@Override
 		public void onResponse(ECEntry entry){
@@ -459,6 +461,9 @@ Running tests with coverage:
 ```
 
 # Changelog
+
+### 0.4.2
+- support for nested entries with `level(int)`
 
 ### 0.4.1
 - added tag api doc
