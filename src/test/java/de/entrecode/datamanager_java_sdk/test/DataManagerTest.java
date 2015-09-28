@@ -1,5 +1,6 @@
 package de.entrecode.datamanager_java_sdk.test;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.squareup.okhttp.mockwebserver.Dispatcher;
 import com.squareup.okhttp.mockwebserver.MockResponse;
@@ -72,6 +73,10 @@ public class DataManagerTest {
                         case "/files/4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd/url":
                         case "/files/4e430eb2-77e7-4f76-9f68-b4b4bacdc7dd/url?thumb=false":
                             return new MockResponse().setResponseCode(200).setBody("{\"url\":\"https://ec-datamanager-default-bucket.s3.amazonaws.com//home/www/datamanagerfiles/c024f209/rcf4bgN0mQWl35PuQ8w08SVh.jpg\"}");
+                        case "/api/beef1234/to-do-list?size=10&page=1&_levels=2":
+                            return new MockResponse().setResponseCode(200).setBody("{\"count\":1,\"total\":1,\"_links\":{\"collection\":{\"href\":\"https://datamanager.buffalo.entrecode.de/api/beef1234\"},\"curies\":{\"name\":\"beef1234\",\"href\":\"https://datamanager.buffalo.entrecode.de/api/doc/beef1234/{rel}\",\"templated\":true},\"self\":{\"href\":\"https://datamanager.buffalo.entrecode.de/api/beef1234/to-do-list?_levels=2\"},\"beef1234:to-do-list/options\":{\"href\":\"https://datamanager.buffalo.entrecode.de/api/beef1234/to-do-list{?created,createdFrom,createdTo,description,description~,id,modified,modifiedFrom,modifiedTo,page,private,size,sort,title,title~,to-do-items~}\",\"templated\":true}},\"_embedded\":{\"beef1234:to-do-list\":{\"id\":\"N1eD_gNfyg\",\"created\":\"2015-09-28T13:32:06.847Z\",\"modified\":\"2015-09-28T13:33:05.093Z\",\"private\":false,\"title\":\"freitag\",\"description\":\"alles erledigen\",\"to-do-items\":[{\"id\":\"41gumJEMke\",\"created\":\"2015-09-28T13:26:31.633Z\",\"modified\":\"2015-09-28T13:26:31.633Z\",\"private\":false,\"title\":\"küche\",\"description\":\"putzen\",\"_links\":{\"collection\":{\"href\":\"https://datamanager.buffalo.entrecode.de/api/beef1234/to-do-item\"},\"self\":{\"href\":\"https://datamanager.buffalo.entrecode.de/api/beef1234/to-do-item?id=41gumJEMke\"}}},{\"id\":\"E1l9xyEfJl\",\"created\":\"2015-09-28T13:25:45.792Z\",\"modified\":\"2015-09-28T13:25:45.792Z\",\"private\":false,\"title\":\"klo\",\"description\":\"sauber machen\",\"_links\":{\"collection\":{\"href\":\"https://datamanager.buffalo.entrecode.de/api/beef1234/to-do-item\"},\"self\":{\"href\":\"https://datamanager.buffalo.entrecode.de/api/beef1234/to-do-item?id=E1l9xyEfJl\"}}}],\"_links\":{\"collection\":{\"href\":\"https://datamanager.buffalo.entrecode.de/api/beef1234/to-do-list\"},\"self\":{\"href\":\"https://datamanager.buffalo.entrecode.de/api/beef1234/to-do-list?id=N1eD_gNfyg\"},\"beef1234:to-do-list/to-do-items\":[{\"href\":\"https://datamanager.buffalo.entrecode.de/api/beef1234/to-do-item?id=41gumJEMke\"},{\"href\":\"https://datamanager.buffalo.entrecode.de/api/beef1234/to-do-item?id=E1l9xyEfJl\"}]}}}}");
+                        case "/api/beef1234/to-do-list?id=N1eD_gNfyg&_levels=2":
+                            return new MockResponse().setResponseCode(200).setBody("{\"id\":\"N1eD_gNfyg\",\"created\":\"2015-09-28T13:32:06.847Z\",\"modified\":\"2015-09-28T13:33:05.093Z\",\"private\":false,\"title\":\"freitag\",\"description\":\"alles erledigen\",\"to-do-items\":[{\"id\":\"41gumJEMke\",\"created\":\"2015-09-28T13:26:31.633Z\",\"modified\":\"2015-09-28T13:26:31.633Z\",\"private\":false,\"title\":\"küche\",\"description\":\"putzen\",\"_links\":{\"collection\":{\"href\":\"https://datamanager.buffalo.entrecode.de/api/beef1234/to-do-item\"},\"self\":{\"href\":\"https://datamanager.buffalo.entrecode.de/api/beef1234/to-do-item?id=41gumJEMke\"}}},{\"id\":\"E1l9xyEfJl\",\"created\":\"2015-09-28T13:25:45.792Z\",\"modified\":\"2015-09-28T13:25:45.792Z\",\"private\":false,\"title\":\"klo\",\"description\":\"sauber machen\",\"_links\":{\"collection\":{\"href\":\"https://datamanager.buffalo.entrecode.de/api/beef1234/to-do-item\"},\"self\":{\"href\":\"https://datamanager.buffalo.entrecode.de/api/beef1234/to-do-item?id=E1l9xyEfJl\"}}}],\"_links\":{\"collection\":{\"href\":\"https://datamanager.buffalo.entrecode.de/api/beef1234/to-do-list\"},\"self\":{\"href\":\"https://datamanager.buffalo.entrecode.de/api/beef1234/to-do-list?id=N1eD_gNfyg\"},\"beef1234:to-do-list/to-do-items\":[{\"href\":\"https://datamanager.buffalo.entrecode.de/api/beef1234/to-do-item?id=41gumJEMke\"},{\"href\":\"https://datamanager.buffalo.entrecode.de/api/beef1234/to-do-item?id=E1l9xyEfJl\"}]}}");
                         case "/api/beef1234/to-do-item-single?size=10&page=1":
                             return new MockResponse().setResponseCode(200).setBody("{\"count\":1,\"total\":1,\"_links\":{\"collection\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234\"},\"curies\":{\"name\":\"beef1234\",\"href\":\"https://datamanager.entrecode.de/api/doc/beef1234/{rel}\",\"templated\":true},\"self\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/to-do-item-single\"},\"beef1234:to-do-item-single/options\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/to-do-item{?created,createdFrom,createdTo,done,id,modified,modifiedFrom,modifiedTo,page,private,size,sort,todo-text,todo-text~}\",\"templated\":true}},\"_embedded\":{\"beef1234:to-do-item-single\":{\"id\":\"VJY4n7vcI\",\"created\":\"2015-06-17T13:22:27.404Z\",\"modified\":\"2015-06-17T13:22:27.404Z\",\"private\":false,\"done\":false,\"todo-text\":\"Test text\",\"_links\":{\"collection\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/to-do-item-single\"},\"self\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/to-do-item-single?id=VJY4n7vcI\"},\"beef1234:to-do-item/creator\":{\"href\":\"https://datamanager.entrecode.de/api/beef1234/user?id=QkHCflm2\"}}}}}");
                         case "/api/beef1234/to-do-item-multiple?size=10&page=1":
@@ -355,6 +360,18 @@ public class DataManagerTest {
     }
 
     @Test
+    public void entriesTwoLevels() throws IOException {
+        final ECList[] entries = new ECList[1];
+
+        DataManager dm = new DataManager(baseUrl, UUID.fromString("5c4ad68e-d03e-4476-92b3-1f0ae06c162e"));
+        dm.model("to-do-list").entries().levels(2).onResponse(r -> entries[0] = r).onError(e -> fail(e.stringify())).go();
+
+        await().until(() -> entries[0] != null);
+        assertEquals(1, entries[0].getCount());
+        assertEquals(1, entries[0].getEmbedded().size());
+    }
+
+    @Test
     public void entriesModelNonexistent() throws IOException {
         final ECError[] error = new ECError[1];
         DataManager dm = new DataManager(baseUrl, UUID.fromString("5c4ad68e-d03e-4476-92b3-1f0ae06c162e"));
@@ -392,6 +409,21 @@ public class DataManagerTest {
         assertEquals(false, entry[0].get("isPrivate"));
         assertEquals("Test text", entry[0].get("todo-text"));
         assertEquals(false, entry[0].get("done"));
+    }
+
+    @Test
+    public void entryTwoLevels() throws IOException {
+        final ECEntry[] entry = new ECEntry[1];
+        DataManager dm = new DataManager(baseUrl, UUID.fromString("5c4ad68e-d03e-4476-92b3-1f0ae06c162e"));
+        dm.model("to-do-list").entry("N1eD_gNfyg").levels(2).onResponse(e -> entry[0] = e).onError(e -> fail(e.stringify())).go();
+
+        await().until(() -> entry[0] != null);
+        assertEquals("N1eD_gNfyg", entry[0].get("id"));
+        assertEquals("2015-09-28T13:32:06.847Z", entry[0].get("created"));
+        assertEquals("2015-09-28T13:33:05.093Z", entry[0].get("modified"));
+        assertEquals(false, entry[0].get("private"));
+        assertEquals(false, entry[0].get("isPrivate"));
+        assertTrue(entry[0].get("to-do-items") instanceof JsonArray);
     }
 
     @Test
