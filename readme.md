@@ -1,3 +1,6 @@
+# DEPRECATED
+> This Module is deprecated. Don't use it anymore! There won't be any bugfixes or improvements.
+
 # ec.datamanager-java-sdk
 
 Java SDK for [ec.datamanager](https://editor.entrecode.de). By entrecode.
